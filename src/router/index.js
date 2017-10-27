@@ -17,7 +17,7 @@ export default new Router({
     //   name: 'Hello',
     //   component: Hello
     // },
-    { path: '/', redirect: '/demopage' },
+    { path: '/', redirect: '/admin' },
     {
       path: '/404',
       name: 'NotFoundView',
