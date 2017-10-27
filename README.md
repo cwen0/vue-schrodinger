@@ -1,5 +1,5 @@
 
-# Vue-Skeleton
+# Vue-Shrodinger
 
 [![CircleCI](https://circleci.com/gh/gaohailang/bookstore-web.svg?style=svg)](https://circleci.com/gh/gaohailang/bookstore-web)
 
