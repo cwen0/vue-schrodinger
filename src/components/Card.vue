@@ -1,6 +1,7 @@
 <template>
     <el-card class="box-card">
-    <my-table :table-data="list"></my-table>
+    <my-table :tableData="tableData"></my-table>
+
   </el-card>
 </template>
 
@@ -13,16 +14,22 @@ export default {
   name: 'card',
   data() {
     return {
-      list: [{
-        name:'', 
-        status:'', 
-        start_time:''
-      }]
+      tableData: {
+        api:"mission",
+        label: ['Mission','Status','Start Time'],
+        prop:['name', 'status','start_time'],
+        list: [{
+          id:'',
+          name:'', 
+          status:'', 
+          start_time:''
+        }]
+      }
     }
   }, 
   created() {
     ajax.getMission().then((result)=> {
-      this.list = result.data.list
+      this.tableData.list = result.data.list
     }).catch(()=>{
     })
   }
@@ -30,7 +37,6 @@ export default {
 </script>
 
 <style scoped>
-
   .text {
     font-size: 14px;
   }

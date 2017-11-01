@@ -1,42 +1,33 @@
-<<template>
-    <el-table
-         ref="singleTable"
-         :data="tableData"
-         highlight-current-row
-         @current-change="handleCurrentChange"
-         style="width: 100%">
-         <el-table-column
-           prop="name"
-           label="Mission"
-           width="180">
-         </el-table-column>
-         <el-table-column
-           prop="status"
-           label="Status"
-           width="180">
-         </el-table-column>
-         <el-table-column
-           prop="start_time"
-           label="Start time">
-         </el-table-column>
-      </el-table> 
+<template>
+  <div>
+    <el-table ref="singleTable" :data="data.list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
+      <el-table-column v-for="(item, index) in data.prop" :key="index" :prop="item" :label="data.label[index]">
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 <script>
-export default {
-  name: 'my-table',
-  props:['table-data'],
-  data() {
-     return {
-       tableData: [table-data]
-     }
-   },
-  methods: {
-         setCurrent(row) {
-           this.$refs.singleTable.setCurrentRow(row);
-         },
-         handleCurrentChange(val) {
-           this.currentRow = val;
-         }
+  export default {
+    name: 'sh-table',
+    props: ['tableData'],
+    data() {
+      return {
+        data: this.tableData
+      }
+    },
+    methods: {
+      setCurrent(row) {
+        this.$refs.singleTable.setCurrentRow(row);
+      },
+      handleCurrentChange(val) {
+        this.currentRow = val;
+        this.tableData.handleClick(val);
+      }
     }
-}
+  }
+
 </script>
+<style lang="scss">
+
+
+</style>

@@ -1,4 +1,3 @@
-@import './element-ui.scss';
 @import './mixin.scss';
 body {
   -moz-osx-font-smoothing: grayscale;
@@ -53,15 +52,16 @@ a:hover {
 }
 
 //main-container全局样式
-.app-main{
+.app-main {
   min-height: 100%
 }
 
 .app-container {
   padding: 20px;
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .svg-icon {
@@ -71,4 +71,3 @@ a:hover {
   fill: currentColor;
   overflow: hidden;
 }
-

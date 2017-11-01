@@ -7,6 +7,7 @@ import router from './router'
 // Using ElementUI ui framework in vue
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+
 Vue.use(ElementUI)
 
 // Using vuex for state-management
