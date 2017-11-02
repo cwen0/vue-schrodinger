@@ -48,7 +48,7 @@ Mock.mock(/\/api\/mission\/\d\/stop/, {
   "message": "OK"
 })
 
-Mock.mock(`${Proxy}/case/template`, {
+Mock.mock(`${Proxy}/case/template`, "get", {
   'list|4-6': [{
     'id|+1': 1,
     'name': '@word',
@@ -58,10 +58,27 @@ Mock.mock(`${Proxy}/case/template`, {
   }]
 })
 
-Mock.mock(/\/api\/case\/template\/[\w-]+/, {
+Mock.mock(/\/api\/case\/template\/[\w-]+/, "get", {
   "id": 1,
   "name": "bank2",
-  "creator": "",
+  "creator": "cwen",
+  "create_time": "2017-10-17 10:27:23",
+  "update_time": "2017-10-17 10:27:23",
+  "desc": "bank template",
+  "type": "test case",
+  "source": {
+    "binary_name": "bank2",
+    "type": "binary",
+    "url": "http://pingcap-dev.hk.ufileos.com/buildbot/pingcap/octopus/7fbccc0cfb535c19247aca515d5ea42f424d46d7/centos7/case-octopus-bank2.tar.gz",
+    "git_value": ""
+  },
+  "args": ""
+})
+
+Mock.mock(`${Proxy}/case/template`, "post", {
+  "id": 10,
+  "name": "bank2",
+  "creator": "cwen",
   "create_time": "2017-10-17 10:27:23",
   "update_time": "2017-10-17 10:27:23",
   "desc": "bank template",
@@ -75,26 +92,10 @@ Mock.mock(/\/api\/case\/template\/[\w-]+/, {
   "args": ""
 })
 
-// Mock.mock(`${Proxy}/case/template`, "POST", {
-//   "id": 1,
-//   "name": "bank2",
-//   "creator": "",
-//   "create_time": "2017-10-17 10:27:23",
-//   "update_time": "2017-10-17 10:27:23",
-//   "desc": "bank template",
-//   "type": "test case",
-//   "source": {
-//     "binaryname": "bank2",
-//     "type": "binary",
-//     "url": "http://pingcap-dev.hk.ufileos.com/buildbot/pingcap/octopus/7fbccc0cfb535c19247aca515d5ea42f424d46d7/centos7/case-octopus-bank2.tar.gz",
-//     "git_value": ""
-//   },
-//   "args": ""
-// })
-
-Mock.mock(`${Proxy}/case/template`, "POST", function(options) {
-  return options.type
+Mock.mock(/\/api\/case\/template\/[\w-]+/, "delete", {
+  'message': "OK",
 })
+
 
 class Ajax {
   getMissions() {
@@ -117,8 +118,16 @@ class Ajax {
     return axios.get(`${Proxy}/case/template/${name}`)
   }
 
-  createCaseTemplate(data) {
+  setCaseTemplate(data) {
     return axios.post(`${Proxy}/case/template`, data)
   }
+
+  deleteCaseTemplate(name) {
+    return axios.delete(`${Proxy}/case/template/${name}`)
+  }
+
+  // updateCaseTemplate(data) {
+  //   return axios.post(`${Proxy}/case/template`, data)
+  // }
 }
 export default new Ajax()
