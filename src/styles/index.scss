@@ -1,4 +1,5 @@
 @import './mixin.scss';
+@import './element-ui.scss';
 body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -8,6 +9,7 @@ body {
 
 html {
   box-sizing: border-box;
+  font-size: 14px;
 }
 
 *,
@@ -70,4 +72,55 @@ a:hover {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+
+// define
+.text {
+  font-size: 14px;
+}
+
+.item {
+  padding: 18px 0;
+}
+
+.box-card {
+  width: 80rem;
+}
+
+.card {
+  display: flex;
+  flex-flow: row;
+}
+
+.sch-card-header {
+  display: flex;
+  flex-flow: row;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 2rem 1rem 1rem;
+}
+
+.sch-detail {
+  margin-top: 2rem; // display: flex; 
+}
+
+.sch-detail-header {
+  padding: 1rem 1rem 1rem 1rem;
+  display: flex;
+  flex-flow: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.sch-detail-summery span {
+  padding-right: 3rem;
+}
+
+.sch-detail-summery strong {
+  padding-left: 1rem;
+}
+
+.sch-detail-body {
+  border: 1px solid #d1dbe5;
+  padding: 0 1rem 0 1rem;
 }

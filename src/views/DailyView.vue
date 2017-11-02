@@ -89,7 +89,7 @@
     },
 
     methods: {
-      confirmStopMission() {
+      confirmStopMission: function() {
         this.$confirm('This will stop this mission, continue?', 'Warning', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
@@ -122,47 +122,3 @@
   }
 
 </script>
-<style lang="scss">
-  .text {
-    font-size: 14px;
-  }
-
-  .item {
-    padding: 18px 0;
-  }
-
-  .box-card {
-    width: 80rem;
-  }
-
-  .card {
-    display: flex;
-    flex-flow: row;
-  }
-
-  .sch-detail {
-    margin-top: 2rem; // display: flex; 
-  }
-
-  .sch-detail-header {
-    padding: 1rem 1rem 1rem 1rem;
-    display: flex;
-    flex-flow: row;
-    align-items: baseline;
-    justify-content: space-between;
-  }
-
-  .sch-detail-summery span {
-    padding-right: 3rem;
-  }
-
-  .sch-detail-summery strong {
-    padding-left: 1rem;
-  }
-
-  .sch-detail-body {
-    border: 1px solid #d1dbe5;
-    padding: 0 1rem 0 1rem;
-  }
-
-</style>

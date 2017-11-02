@@ -7,7 +7,7 @@ Mock.mock(`${Proxy}/mission`, {
     'id|+1': 1,
     'name': '@word',
     'status|1': ["RUNNING", "ERROR", "FINISHED"],
-    'start_time': '2017-10-26 17:33:02',
+    'start_time': '2017-10-26 17:33:02'
   }]
 })
 
@@ -45,7 +45,55 @@ Mock.mock(/\/api\/mission\/\d/, {
 })
 
 Mock.mock(/\/api\/mission\/\d\/stop/, {
-   "message": "OK"
+  "message": "OK"
+})
+
+Mock.mock(`${Proxy}/case/template`, {
+  'list|4-6': [{
+    'id|+1': 1,
+    'name': '@word',
+    'creator': '@name',
+    'create_time': '2017-10-26 17:33:02',
+    'type|1': ["auxiliary tool", "test case"]
+  }]
+})
+
+Mock.mock(/\/api\/case\/template\/[\w-]+/, {
+  "id": 1,
+  "name": "bank2",
+  "creator": "",
+  "create_time": "2017-10-17 10:27:23",
+  "update_time": "2017-10-17 10:27:23",
+  "desc": "bank template",
+  "type": "test case",
+  "source": {
+    "binaryname": "bank2",
+    "type": "binary",
+    "url": "http://pingcap-dev.hk.ufileos.com/buildbot/pingcap/octopus/7fbccc0cfb535c19247aca515d5ea42f424d46d7/centos7/case-octopus-bank2.tar.gz",
+    "git_value": ""
+  },
+  "args": ""
+})
+
+// Mock.mock(`${Proxy}/case/template`, "POST", {
+//   "id": 1,
+//   "name": "bank2",
+//   "creator": "",
+//   "create_time": "2017-10-17 10:27:23",
+//   "update_time": "2017-10-17 10:27:23",
+//   "desc": "bank template",
+//   "type": "test case",
+//   "source": {
+//     "binaryname": "bank2",
+//     "type": "binary",
+//     "url": "http://pingcap-dev.hk.ufileos.com/buildbot/pingcap/octopus/7fbccc0cfb535c19247aca515d5ea42f424d46d7/centos7/case-octopus-bank2.tar.gz",
+//     "git_value": ""
+//   },
+//   "args": ""
+// })
+
+Mock.mock(`${Proxy}/case/template`, "POST", function(options) {
+  return options.type
 })
 
 class Ajax {
@@ -59,6 +107,18 @@ class Ajax {
 
   stopMissionByID(id) {
     return axios.get(`${Proxy}/mission/${id}/stop`)
+  }
+
+  getCasesTemplate() {
+    return axios.get(`${Proxy}/case/template`)
+  }
+
+  getCaseTemplateByName(name) {
+    return axios.get(`${Proxy}/case/template/${name}`)
+  }
+
+  createCaseTemplate(data) {
+    return axios.post(`${Proxy}/case/template`, data)
   }
 }
 export default new Ajax()

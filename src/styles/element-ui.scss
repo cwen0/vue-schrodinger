@@ -15,6 +15,7 @@
   left: 0;
   position: relative;
   margin: 0 auto;
+  width: 50rem;
 }
 
 //element ui upload
@@ -27,3 +28,8 @@
     }
   }
 }
+
+.el-collapse-item__content {
+  font-size: 12px;
+}
+
