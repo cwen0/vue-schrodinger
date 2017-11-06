@@ -9,7 +9,7 @@
             </Strong>
           </div>
           <div>
-            <el-button @click="dialogCreateCaseTemplate = true">New</el-button>
+            <el-button @click="clickCreateCaseTemplate()">New</el-button>
           </div>
         </div>
         <sh-table :tableData="tableData"></sh-table>
@@ -21,16 +21,16 @@
           <div class="sch-detail-header">
             <div class="sch-detail-summery">
               <span>Case Name:
-                <strong> {{detail.name}}</strong>
+                <strong> {{detail.name || ''}}</strong>
               </span>
               <span>Type:
                 <strong> {{detail.type}}</strong>
               </span>
             </div>
             <div>
-              <el-button @click="confirmDeleteCaseTemplate()">
+              <el-button @click="clickDeleteCaseTemplate()">
                 <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button>
-              <el-button @click="handleUpdateCaseTemplate()">
+              <el-button @click="clickUpdateCaseTemplate()">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</el-button>
             </div>
           </div>
@@ -86,7 +86,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogCreateCaseTemplate = false">Cancel</el-button>
+          <el-button @click="dialogCreateCaseTemplate = false; clearCaseForm()">Cancel</el-button>
           <el-button @click="resetForm('caseForm')">Reset</el-button>
           <el-button @click="submitForm('caseForm', 'new')">OK</el-button>
         </div>
@@ -137,7 +137,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogUpdateCaseTemplate = false">Cancel</el-button>
+          <el-button @click="dialogUpdateCaseTemplate = false; clearCaseForm()">Cancel</el-button>
+          <el-button @click="resetForm('caseForm')">Reset</el-button>
           <el-button @click="submitForm('caseForm','update')">Save</el-button>
         </div>
       </el-dialog>
@@ -282,6 +283,7 @@
             type: 'success',
             message: 'Create Case Template Success!'
           });
+          this.clearCaseForm()
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
@@ -314,7 +316,8 @@
             type: 'success',
             message: 'Update Case Template Success!'
           });
-          location.reload() ;
+          this.clearCaseForm()
+          location.reload();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
@@ -348,10 +351,12 @@
       },
 
       resetForm(formName) {
-        this.$refs[formName].resetFields();
+        if (this.$refs[formName] != null) {
+          this.$refs[formName].resetFields();
+        }
       },
 
-      confirmDeleteCaseTemplate: function () {
+      clickDeleteCaseTemplate: function () {
         this.$confirm('This will delete this case template, continue?', 'Warning', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
@@ -380,7 +385,7 @@
         });
       },
 
-      handleUpdateCaseTemplate: function () {
+      clickUpdateCaseTemplate: function () {
         this.caseForm = {
           name: this.detail.name,
           creator: this.detail.creator,
@@ -393,6 +398,26 @@
           arg: this.detail.arg
         };
         this.dialogUpdateCaseTemplate = true;
+      },
+
+      clickCreateCaseTemplate: function () {
+        this.clearCaseForm();
+        this.resetForm('caseForm')
+        this.dialogCreateCaseTemplate = true;
+      },
+
+      clearCaseForm: function () {
+        this.caseForm = {
+          name: '',
+          creator: '',
+          type: '',
+          desc: '',
+          binary_name: '',
+          source_type: '',
+          source_url: '',
+          git_value: '',
+          arg: ''
+        }
       }
     }
   }

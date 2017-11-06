@@ -7,7 +7,7 @@ Mock.mock(`${Proxy}/mission`, {
     'id|+1': 1,
     'name': '@word',
     'status|1': ["RUNNING", "ERROR", "FINISHED"],
-    'start_time': '2017-10-26 17:33:02'
+    'start_time': '2017-10-31 17:33:02'
   }]
 })
 
@@ -96,6 +96,50 @@ Mock.mock(/\/api\/case\/template\/[\w-]+/, "delete", {
   'message': "OK",
 })
 
+Mock.mock(`${Proxy}/cluster/template`, "get", {
+  "list|4-6": [{
+    "name": '@name',
+    "creator": "cwen",
+    "desc": '@string',
+    "pd": 3,
+    "tidb": 3,
+    "tikv": 5,
+    "configmap": "latest-config-template"
+  }]
+})
+
+Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "get", {
+  "id": 1,
+  "name": "simple-cluster",
+  "desc": "simple cluster",
+  "creator": "cwen",
+  "create_time": "2017-10-17 15:31:16",
+  "update_time": "2017-10-17 15:31:16",
+  "pd": 3,
+  "tidb": 3,
+  "tikv": 5,
+  "configmap": "tidb-instance-config-template", 
+  "desc": "this cluster for test stability-test"
+})
+
+
+Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "delete", {
+  'message': "OK",
+})
+
+Mock.mock(`${Proxy}/cluster/template`, "post", {
+  "id": 10,
+  "name": "simple-cluster",
+  "desc": "simple cluster",
+  "creator": "cwen",
+  "create_time": "2017-10-17 15:31:16",
+  "update_time": "2017-10-17 15:31:16",
+  "pd": 3,
+  "tidb": 3,
+  "tikv": 5,
+  "configmap": "tidb-instance-config-template", 
+  "desc": "this cluster for test stability-test"
+})
 
 class Ajax {
   getMissions() {
@@ -126,8 +170,20 @@ class Ajax {
     return axios.delete(`${Proxy}/case/template/${name}`)
   }
 
-  // updateCaseTemplate(data) {
-  //   return axios.post(`${Proxy}/case/template`, data)
-  // }
+  getClustersTemplate() {
+    return axios.get(`${Proxy}/cluster/template`)
+  }
+
+  getClusterTemplateByName(name) {
+    return axios.get(`${Proxy}/cluster/template/${name}`)
+  }
+
+  deleteClusterTemplate(name) {
+    return axios.delete(`${Proxy}/cluster/template/${name}`)
+  }
+
+  setClusterTemplate(data) {
+    return axios.post(`${Proxy}/cluster/template`, data)
+  }
 }
 export default new Ajax()
