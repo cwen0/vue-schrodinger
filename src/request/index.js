@@ -118,7 +118,7 @@ Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "get", {
   "pd": 3,
   "tidb": 3,
   "tikv": 5,
-  "configmap": "tidb-instance-config-template", 
+  "configmap": "tidb-instance-config-template",
   "desc": "this cluster for test stability-test"
 })
 
@@ -137,8 +137,40 @@ Mock.mock(`${Proxy}/cluster/template`, "post", {
   "pd": 3,
   "tidb": 3,
   "tikv": 5,
-  "configmap": "tidb-instance-config-template", 
+  "configmap": "tidb-instance-config-template",
   "desc": "this cluster for test stability-test"
+})
+
+Mock.mock(`${Proxy}/scenes`, "get", {
+  "list|4-6": [{
+    "name": '@name',
+    "desc": "statbility",
+    "creator": "cwen",
+    "create_time": "2017-10-17 15:31:16",
+    "boxes|2-4": [{
+      "name": '@name',
+      "cluster_template": "simple-cluster",
+      "case_templates": [
+        "bank2"
+      ]
+    }]
+  }]
+})
+
+Mock.mock(/\/api\/sences\/[\w-]+/, "get", {
+  "id": 2,
+  "name": 'stability-test',
+  "desc": "statbility",
+  "creator": "cwen",
+  "create_time": "2017-10-17 15:31:16",
+  "update_time": "2017-10-17 15:31:16",
+  "boxes": [{
+    "name": 'simple-test',
+    "cluster_template": "simple-cluster",
+    "case_templates": [
+      "bank2"
+    ]
+  }]
 })
 
 class Ajax {
@@ -184,6 +216,14 @@ class Ajax {
 
   setClusterTemplate(data) {
     return axios.post(`${Proxy}/cluster/template`, data)
+  }
+
+  getSences() {
+    return axios.get(`${Proxy}/scenes`)
+  }
+
+  getSenceByName(name) {
+    return axios.get(`${Proxy}/sences/${name}`)
   }
 }
 export default new Ajax()

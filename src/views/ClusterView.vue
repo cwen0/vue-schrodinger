@@ -93,15 +93,7 @@
         tableData: {
           label: ["Name", "Creator", "PD Size", "TiDB Size", "TiKV Size", "ConfigMap", "Description"],
           prop: ["name", "creator", "pd", "tidb", "tikv", "configmap"],
-          list: [{
-            id: '',
-            name: '',
-            creator: '',
-            pd: 0,
-            tidb: 0,
-            tikv: 0,
-            configmap: ''
-          }],
+          list: [],
 
           handleClick: function (row) {
             ajax.getClusterTemplateByName(row.name).then((result) => {
@@ -199,7 +191,6 @@
         this.tableData.list = result.data.list;
         this.clusterCount = this.tableData.list.length;
       }).catch(() => {})
-      this.tableData.list = null;
     },
 
     methods: {

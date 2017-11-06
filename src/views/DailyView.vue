@@ -55,12 +55,7 @@
         tableData: {
           label: ['Mission', 'Status', 'Start Time'],
           prop: ['name', 'status', 'start_time'],
-          list: [{
-            id: '',
-            name: '',
-            status: '',
-            start_time: ''
-          }],
+          list: [],
 
           handleClick: function (row) {
             ajax.getMissionByID(row.id).then((result) => {

@@ -167,13 +167,7 @@
         tableData: {
           label: ["Name", "Creator", "Create Time", "Type"],
           prop: ["name", "creator", "create_time", "type"],
-          list: [{
-            id: '',
-            name: '',
-            creator: '',
-            create_time: '',
-            type: ''
-          }],
+          list: [],
 
           handleClick: function (row) {
             ajax.getCaseTemplateByName(row.name).then((result) => {
@@ -258,7 +252,6 @@
         this.tableData.list = result.data.list;
         this.caseCount = this.tableData.list.length;
       }).catch(() => {})
-      this.tableData.list = null;
     },
 
     methods: {
