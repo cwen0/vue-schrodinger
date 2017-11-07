@@ -208,13 +208,13 @@
         }
       },
 
-      resetForm(formName) {
+      resetForm: function (formName) {
         if (this.$refs[formName] != null) {
           this.$refs[formName].resetFields();
         }
       },
 
-      addBox() {
+      addBox: function () {
         this.dialogData.sencesForm.boxes.push({
           key: Date.now(),
           name: '',
@@ -223,7 +223,7 @@
         });
       },
 
-      removeBox(item) {
+      removeBox: function (item) {
         var index = this.dialogData.sencesForm.boxes.indexOf(item)
         if (index !== -1) {
           this.dialogData.sencesForm.boxes.splice(index, 1)
@@ -292,7 +292,7 @@
 
           var index = this.tableData.list.indexOf(this.dialogData.sencesForm);
           if (index !== -1) {
-            this.tableData.list[index] =this.dialogData.sencesForm ;
+            this.tableData.list[index] = this.dialogData.sencesForm;
             this.detail = this.dialogData.sencesForm;
           }
         }).catch((resp) => {

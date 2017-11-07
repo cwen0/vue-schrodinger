@@ -7,7 +7,7 @@ Mock.mock(`${Proxy}/mission`, {
     'id|+1': 1,
     'name': '@word',
     'status|1': ["RUNNING", "ERROR", "FINISHED"],
-    'start_time': '2017-10-31 17:33:02'
+    'start_time': '2017-11-06 17:33:02'
   }]
 })
 
