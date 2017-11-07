@@ -51,7 +51,7 @@ Mock.mock(/\/api\/mission\/\d\/stop/, {
 Mock.mock(`${Proxy}/case/template`, "get", {
   'list|4-6': [{
     'id|+1': 1,
-    'name': '@word',
+    'name': 'bank'+'@id',
     'creator': '@name',
     'create_time': '2017-10-26 17:33:02',
     'type|1': ["auxiliary tool", "test case"]
@@ -173,6 +173,26 @@ Mock.mock(/\/api\/sences\/[\w-]+/, "get", {
   }]
 })
 
+Mock.mock(/\/api\/sences\/[\w-]+/, "delete", {
+  'message': "OK",
+})
+
+Mock.mock(`${Proxy}/sences`, "post", {
+  "id": 10,
+  "name": 'stability-test',
+  "desc": "statbility",
+  "creator": "cwen",
+  "create_time": "2017-10-17 15:31:16",
+  "update_time": "2017-10-17 15:31:16",
+  "boxes": [{
+    "name": 'simple-test',
+    "cluster_template": "simple-cluster",
+    "case_templates": [
+      "bank2"
+    ]
+  }]
+})
+
 class Ajax {
   getMissions() {
     return axios.get(`${Proxy}/mission`)
@@ -222,8 +242,16 @@ class Ajax {
     return axios.get(`${Proxy}/scenes`)
   }
 
-  getSenceByName(name) {
+  getSencesByName(name) {
     return axios.get(`${Proxy}/sences/${name}`)
+  }
+
+  deleteSences(name) {
+    return axios.delete(`${Proxy}/sences/${name}`)
+  }
+
+  setSences(data) {
+    return axios.post(`${Proxy}/sences`, data) 
   }
 }
 export default new Ajax()

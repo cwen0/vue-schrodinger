@@ -234,7 +234,7 @@
         this.dialogData = {
           title: "Update Cluster Template",
           type: "update",
-          clusterForm: this.detail,
+          clusterForm: this.detail
         }
         this.dialog = true;
       },
@@ -324,8 +324,12 @@
             type: 'success',
             message: 'Update Cluster Template Success!'
           });
-          this.clearClusterForm()
-          location.reload();
+          // this.clearClusterForm()
+          var index = this.tableData.list.indexOf(this.dialogData.clusterForm);
+          if (index !== -1) {
+            this.tableData.list[index] = this.dialogData.clusterForm;
+            this.detail = this.dialogData.clusterForm;
+          }
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",

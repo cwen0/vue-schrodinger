@@ -309,8 +309,12 @@
             type: 'success',
             message: 'Update Case Template Success!'
           });
-          this.clearCaseForm()
-          location.reload();
+          // this.clearCaseForm()
+          var index = this.tableData.list.indexOf(this.dialogData.caseForm);
+          if (index !== -1) {
+            this.tableData.list[index] = this.dialogData.caseForm;
+            this.detail = this.dialogData.caseForm;
+          }
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
