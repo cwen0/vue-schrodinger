@@ -2,13 +2,15 @@ import Mock from 'mockjs'
 import axios from 'axios'
 const Proxy = '/api'
 
-Mock.mock(`${Proxy}/mission`, {
-  'list|4-6': [{
-    'id|+1': 1,
-    'name': '@word',
-    'status|1': ["RUNNING", "ERROR", "FINISHED"],
-    'start_time': '2017-11-06 17:33:02'
-  }]
+Mock.mock(`${Proxy}/mission`, "get", function () {
+  return Mock.mock({
+    "list|3-5": [{
+      'id|+1': 1,
+      'name': '@word',
+      'status|1': ["RUNNING", "ERROR", "FINISHED"],
+      'start_time': '2017-11-06 17:33:02'
+    }]
+  }).list
 })
 
 Mock.mock(/\/api\/mission\/\d/, {
@@ -48,14 +50,16 @@ Mock.mock(/\/api\/mission\/\d\/stop/, {
   "message": "OK"
 })
 
-Mock.mock(`${Proxy}/case/template`, "get", {
-  'list|4-6': [{
-    'id|+1': 1,
-    'name': '@word',
-    'creator': 'cwen',
-    'create_time': '2017-10-26 17:33:02',
-    'type|1': ["auxiliary tool", "test case"]
-  }]
+Mock.mock(`${Proxy}/case/template`, "get", function () {
+  return Mock.mock({
+    'list|4-6': [{
+      'id|+1': 1,
+      'name': '@word',
+      'creator': 'cwen',
+      'create_time': '2017-10-26 17:33:02',
+      'type|1': ["auxiliary tool", "test case"]
+    }]
+  }).list
 })
 
 Mock.mock(/\/api\/case\/template\/[\w-]+/, "get", {
@@ -96,16 +100,18 @@ Mock.mock(/\/api\/case\/template\/[\w-]+/, "delete", {
   'message': "OK",
 })
 
-Mock.mock(`${Proxy}/cluster/template`, "get", {
-  "list|4-6": [{
-    "name": '@name',
-    "creator": "cwen",
-    "desc": '@string',
-    "pd": 3,
-    "tidb": 3,
-    "tikv": 5,
-    "configmap": "latest-config-template"
-  }]
+Mock.mock(`${Proxy}/cluster/template`, "get", function () {
+  return Mock.mock({
+    "list|4-6": [{
+      "name": '@name',
+      "creator": "cwen",
+      "desc": '@string',
+      "pd": 3,
+      "tidb": 3,
+      "tikv": 5,
+      "configmap": "latest-config-template"
+    }]
+  }).list
 })
 
 Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "get", {
@@ -141,20 +147,22 @@ Mock.mock(`${Proxy}/cluster/template`, "post", {
   "desc": "this cluster for test stability-test"
 })
 
-Mock.mock(`${Proxy}/scenes`, "get", {
-  "list|4-6": [{
-    "name": '@name',
-    "desc": "statbility",
-    "creator": "cwen",
-    "create_time": "2017-10-17 15:31:16",
-    "boxes|2-4": [{
+Mock.mock(`${Proxy}/scenes`, "get", function () {
+  return Mock.mock({
+    "list|4-6": [{
       "name": '@name',
-      "cluster_template": "simple-cluster",
-      "case_templates": [
-        "bank2"
-      ]
+      "desc": "statbility",
+      "creator": "cwen",
+      "create_time": "2017-10-17 15:31:16",
+      "boxes|2-4": [{
+        "name": '@name',
+        "cluster_template": "simple-cluster",
+        "case_templates": [
+          "bank2"
+        ]
+      }]
     }]
-  }]
+  }).list
 })
 
 Mock.mock(/\/api\/sences\/[\w-]+/, "get", {
@@ -193,22 +201,26 @@ Mock.mock(`${Proxy}/sences`, "post", {
   }]
 })
 
-Mock.mock(`${Proxy}/mission/filter`, "get", {
-  'list|4-6': [{
-    'id|+1': 1,
-    'name': '@word',
-    'status|1': ["RUNNING", "ERROR", "FINISHED"],
-    'start_time': '2017-11-06 17:33:02'
-  }]
+Mock.mock(`${Proxy}/mission/filter`, "get", function () {
+  return Mock.mock({
+    'list|4-6': [{
+      'id|+1': 1,
+      'name': '@word',
+      'status|1': ["RUNNING", "ERROR", "FINISHED"],
+      'start_time': '2017-11-06 17:33:02'
+    }]
+  }).list
 })
 
-Mock.mock(/\/api\/mission\/[\w-]+/, "get", {
-  'list|4-6': [{
-    'id|+1': 1,
-    'name': '@word',
-    'status|1': ["RUNNING", "ERROR", "FINISHED"],
-    'start_time': '2017-11-06 17:33:02'
-  }]
+Mock.mock(/\/api\/mission\/[\w-]+/, "get", function () {
+  return Mock.mock({
+    'list|4-6': [{
+      'id|+1': 1,
+      'name': '@word',
+      'status|1': ["RUNNING", "ERROR", "FINISHED"],
+      'start_time': '2017-11-06 17:33:02'
+    }]
+  }).list
 })
 
 class Ajax {
@@ -277,7 +289,7 @@ class Ajax {
   }
 
   getMissionByPeriod(period) {
-    return axios.get(`${Proxy}/mission/${period}`) 
+    return axios.get(`${Proxy}/mission/${period}`)
   }
 }
 export default new Ajax()

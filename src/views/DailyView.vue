@@ -89,7 +89,7 @@
 
     created() {
       ajax.getMissionByPeriod(this.period).then((result) => {
-        this.tableData.list = result.data.list;
+        this.tableData.list = result.data;
         this.missionCount = this.tableData.list.length;
       }).catch(() => {})
     },
@@ -135,7 +135,7 @@
     watch: {
       period: function (val) {
         ajax.getMissionByPeriod(val).then((result) => {
-          this.tableData.list = result.data.list;
+          this.tableData.list = result.data;
           this.missionCount = this.tableData.list.length;
           this.detail = '';
           this.isShow = false;

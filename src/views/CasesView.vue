@@ -249,7 +249,7 @@
 
     created() {
       ajax.getCasesTemplate().then((result) => {
-        this.tableData.list = result.data.list;
+        this.tableData.list = result.data;
         this.caseCount = this.tableData.list.length;
       }).catch(() => {})
     },

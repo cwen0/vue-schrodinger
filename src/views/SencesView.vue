@@ -131,19 +131,19 @@
 
     created() {
       ajax.getSences().then((result) => {
-        result.data.list.forEach(function (element) {
+        result.data.forEach(function (element) {
           element.boxes_count = element.boxes.length;
         });
-        this.tableData.list = result.data.list;
+        this.tableData.list = result.data;
         this.sencesCount = this.tableData.list.length;
       }).catch(() => {})
 
       ajax.getClustersTemplate().then((result) => {
-        this.clustersTemplate = result.data.list;
+        this.clustersTemplate = result.data;
       }).catch(() => {})
 
       ajax.getCasesTemplate().then((result) => {
-        this.casesTemplate = result.data.list;
+        this.casesTemplate = result.data;
       }).catch(() => {})
     },
 

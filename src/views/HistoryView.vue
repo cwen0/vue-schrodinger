@@ -100,7 +100,7 @@
 
     created() {
       ajax.getMissions().then((result) => {
-        this.tableData.list = result.data.list;
+        this.tableData.list = result.data;
         this.missionCount = this.tableData.list.length;
       }).catch(() => {})
     },
@@ -146,7 +146,7 @@
           tidb: tidb,
           tikv: tikv
         }).then((result) => {
-          this.tableData.list = result.data.list;
+          this.tableData.list = result.data;
           this.missionCount = this.tableData.list.length;
           // this.$refs.singleTable.setCurrentRow();
           this.detail = '';

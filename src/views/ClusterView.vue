@@ -188,7 +188,7 @@
 
     created() {
       ajax.getClustersTemplate().then((result) => {
-        this.tableData.list = result.data.list;
+        this.tableData.list = result.data;
         this.clusterCount = this.tableData.list.length;
       }).catch(() => {})
     },
