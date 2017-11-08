@@ -157,16 +157,15 @@
         return;
       },
       clickUpdateSences: function () {
-        this.dialogData = {
-          title: "Update Cluster Template",
+        this.dialogData = Object.assign({}, this.dialogData, {
+          title: "Update Sences",
           type: "update",
           sencesForm: {
             name: this.detail.name,
             creator: this.detail.creator,
             boxes: this.detail.boxes
-            //  boxes:[]
           }
-        }
+        })
         this.dialog = true;
       },
 
@@ -295,6 +294,7 @@
             this.tableData.list[index] = this.dialogData.sencesForm;
             this.detail = this.dialogData.sencesForm;
           }
+          this.clearSencesForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",

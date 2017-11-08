@@ -195,7 +195,7 @@
 
     methods: {
       clickCreateClusterTemplate: function () {
-        this.clearClusterForm();
+        // this.clearClusterForm();
         this.dialogData.title = "Create Cluster Template";
         this.dialogData.type = "new";
         this.dialog = true;
@@ -231,11 +231,11 @@
       },
 
       clickUpdateClusterTemplate: function () {
-        this.dialogData = {
+        this.dialogData = Object.assign({}, this.dialogData, {
           title: "Update Cluster Template",
           type: "update",
           clusterForm: this.detail
-        }
+        })
         this.dialog = true;
       },
 
@@ -295,7 +295,7 @@
             type: 'success',
             message: 'Create Cluster Template Success!'
           });
-          this.clearClusterForm()
+          this.clearClusterForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
@@ -324,12 +324,12 @@
             type: 'success',
             message: 'Update Cluster Template Success!'
           });
-          // this.clearClusterForm()
           var index = this.tableData.list.indexOf(this.dialogData.clusterForm);
           if (index !== -1) {
             this.tableData.list[index] = this.dialogData.clusterForm;
             this.detail = this.dialogData.clusterForm;
           }
+          //this.clearClusterForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
