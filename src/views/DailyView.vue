@@ -2,6 +2,21 @@
   <div>
     <div class="card">
       <el-card class="box-card">
+        <div class="sch-card-header">
+          <div>
+            <Strong>
+              <span>Count: {{missionCount}}</span>
+            </Strong>
+          </div>
+          <div>
+            <el-radio-group v-model="period">
+              <el-radio-button label="daily"></el-radio-button>
+              <el-radio-button label="weekly"></el-radio-button>
+              <el-radio-button label="monthly"></el-radio-button>
+              <el-radio-button label="yearly"></el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
         <sh-table :tableData="tableData"></sh-table>
       </el-card>
     </div>
@@ -52,39 +67,35 @@
         activeNames: ['1'],
         isShow: false,
         detail: '',
+        missionCount: 0,
+        period: "daily",
         tableData: {
           label: ['Mission', 'Status', 'Start Time'],
           prop: ['name', 'status', 'start_time'],
           list: [],
 
           handleClick: function (row) {
+            if(row == null) {
+              return 
+            }
             ajax.getMissionByID(row.id).then((result) => {
               this.detail = result.data;
               this.isShow = true;
             }).catch(() => {})
           }.bind(this)
-        }
+        },
       }
     },
 
     created() {
-      ajax.getMissions().then((result) => {
-        var tmpList = result.data.list;
-        var dailyMissions = [];
-        tmpList.forEach(function (value) {
-          var tmpDate = new Date(value.start_time);
-          var now = new Date();
-          var tmpDate2 = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
-          if (tmpDate > tmpDate2) {
-            dailyMissions.push(value);
-          }
-        })
-        this.tableData.list = dailyMissions;
+      ajax.getMissionByPeriod(this.period).then((result) => {
+        this.tableData.list = result.data.list;
+        this.missionCount = this.tableData.list.length;
       }).catch(() => {})
     },
 
     methods: {
-      confirmStopMission: function() {
+      confirmStopMission: function () {
         this.$confirm('This will stop this mission, continue?', 'Warning', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
@@ -112,6 +123,23 @@
             message: 'Stop canceled'
           });
         });
+      }
+
+      // searchMission: function() {
+      //   console.log(1);
+      //   console.log(this.period);
+      //   return
+      // }
+    },
+
+    watch: {
+      period: function (val) {
+        ajax.getMissionByPeriod(val).then((result) => {
+          this.tableData.list = result.data.list;
+          this.missionCount = this.tableData.list.length;
+          this.detail = '';
+          this.isShow = false;
+        }).catch(() => {})
       }
     }
   }

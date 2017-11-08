@@ -51,8 +51,8 @@ Mock.mock(/\/api\/mission\/\d\/stop/, {
 Mock.mock(`${Proxy}/case/template`, "get", {
   'list|4-6': [{
     'id|+1': 1,
-    'name': 'bank' + '@id',
-    'creator': '@name',
+    'name': '@word',
+    'creator': 'cwen',
     'create_time': '2017-10-26 17:33:02',
     'type|1': ["auxiliary tool", "test case"]
   }]
@@ -202,6 +202,15 @@ Mock.mock(`${Proxy}/mission/filter`, "get", {
   }]
 })
 
+Mock.mock(/\/api\/mission\/[\w-]+/, "get", {
+  'list|4-6': [{
+    'id|+1': 1,
+    'name': '@word',
+    'status|1': ["RUNNING", "ERROR", "FINISHED"],
+    'start_time': '2017-11-06 17:33:02'
+  }]
+})
+
 class Ajax {
   getMissions() {
     return axios.get(`${Proxy}/mission`)
@@ -265,6 +274,10 @@ class Ajax {
 
   searchMission(filter) {
     return axios.get(`${Proxy}/mission/filter`, filter)
+  }
+
+  getMissionByPeriod(period) {
+    return axios.get(`${Proxy}/mission/${period}`) 
   }
 }
 export default new Ajax()
