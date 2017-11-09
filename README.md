@@ -119,4 +119,3 @@ https://github.com/vuejs/babel-plugin-transform-vue-jsx
 ### 参考
 
 ### Misc
-# vue-schrodinger
