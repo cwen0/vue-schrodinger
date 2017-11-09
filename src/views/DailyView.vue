@@ -102,7 +102,6 @@
           type: 'warning'
         }).then(() => {
           ajax.stopMissionByID(this.detail.id).then((result) => {
-            console.log(result.message);
             this.$notify({
               title: "SUCCESS",
               type: 'success',
@@ -112,7 +111,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.message,
+              message: resp.data,
               duration: 0
             });
           });
@@ -124,12 +123,6 @@
           });
         });
       }
-
-      // searchMission: function() {
-      //   console.log(1);
-      //   console.log(this.period);
-      //   return
-      // }
     },
 
     watch: {

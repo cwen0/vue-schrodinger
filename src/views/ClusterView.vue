@@ -217,7 +217,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.message,
+              message: resp.data,
               duration: 0
             });
           });
@@ -300,7 +300,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.message,
+            message: resp.data,
             duration: 0
           });
         })
@@ -334,7 +334,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.message,
+            message: resp.data,
             duration: 0
           });
         })

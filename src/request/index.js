@@ -46,9 +46,7 @@ Mock.mock(/\/api\/mission\/\d/, {
   }
 })
 
-Mock.mock(/\/api\/mission\/\d\/stop/, {
-  "message": "OK"
-})
+Mock.mock(/\/api\/mission\/\d\/stop/, "OK")
 
 Mock.mock(`${Proxy}/case/template`, "get", function () {
   return Mock.mock({
@@ -96,9 +94,7 @@ Mock.mock(`${Proxy}/case/template`, "post", {
   "args": ""
 })
 
-Mock.mock(/\/api\/case\/template\/[\w-]+/, "delete", {
-  'message': "OK",
-})
+Mock.mock(/\/api\/case\/template\/[\w-]+/, "delete", "OK")
 
 Mock.mock(`${Proxy}/cluster/template`, "get", function () {
   return Mock.mock({
@@ -129,9 +125,7 @@ Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "get", {
 })
 
 
-Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "delete", {
-  'message': "OK",
-})
+Mock.mock(/\/api\/cluster\/template\/[\w-]+/, "delete", "OK")
 
 Mock.mock(`${Proxy}/cluster/template`, "post", {
   "id": 10,
@@ -181,9 +175,7 @@ Mock.mock(/\/api\/sences\/[\w-]+/, "get", {
   }]
 })
 
-Mock.mock(/\/api\/sences\/[\w-]+/, "delete", {
-  'message': "OK",
-})
+Mock.mock(/\/api\/sences\/[\w-]+/, "delete", "OK")
 
 Mock.mock(`${Proxy}/sences`, "post", {
   "id": 10,
@@ -211,6 +203,8 @@ Mock.mock(`${Proxy}/mission/filter`, "get", function () {
     }]
   }).list
 })
+
+Mock.mock(`${Proxy}/release`, "get", "OK")
 
 Mock.mock(/\/api\/mission\/[\w-]+/, "get", function () {
   return Mock.mock({
@@ -290,6 +284,10 @@ class Ajax {
 
   getMissionByPeriod(period) {
     return axios.get(`${Proxy}/mission/${period}`)
+  }
+
+  release(data) {
+    return axios.get(`${Proxy}/release`, data)
   }
 }
 export default new Ajax()

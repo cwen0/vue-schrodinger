@@ -69,8 +69,8 @@
                 <el-option v-for="(cluster, index) in clustersTemplate" :key="cluster.id" :label="cluster.name" :value="cluster.name"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="Cases Template:" :prop="'boxes.'+index + '.case_templates'">
-              <el-select v-model="box.case_templates" multiple placeholder="select cases template" style="width: 33rem;">
+            <el-form-item label="Cases Template:" :prop="'boxes.'+index + '.case_templates'"   >
+              <el-select v-model="box.case_templates" multiple placeholder="select cases template" style="width: 33rem;" >
                 <el-option v-for="item in casesTemplate" :key="item.id" :label="item.name" :value="item.name">
                 </el-option>
               </el-select>
@@ -185,7 +185,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.message,
+              message: resp.data,
               duration: 0
             });
           });
@@ -269,7 +269,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.message,
+            message: resp.data,
             duration: 0
           });
         })
@@ -299,7 +299,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.message,
+            message: resp.data,
             duration: 0
           });
         })

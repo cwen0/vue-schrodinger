@@ -141,6 +141,14 @@
           }
         }, this);
 
+        if (pd == '' && tidb == '' && tikv == '') {
+          this.$message({
+            message: 'No PD/TiDB/TiKV Version is selected...',
+            type: 'warning'
+          });
+          return
+        }
+
         ajax.searchMission({
           pd: pd,
           tidb: tidb,
