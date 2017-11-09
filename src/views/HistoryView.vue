@@ -79,7 +79,7 @@
 
           handleClick: function (row) {
             if (row == null) {
-              return 
+              return
             }
             ajax.getMissionByID(row.id).then((result) => {
               this.detail = result.data;
@@ -154,12 +154,28 @@
           tidb: tidb,
           tikv: tikv
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
           this.tableData.list = result.data;
           this.missionCount = this.tableData.list.length;
           // this.$refs.singleTable.setCurrentRow();
           this.detail = '';
           this.isShow = false;
-        }).catch(() => {})
+        }).catch((resp) => {
+          this.$notify({
+            title: "ERROR",
+            type: 'error',
+            message: resp.message,
+            duration: 0
+          });
+        })
       }
     }
   }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import DailyView from '@/views/DailyView'
-import SencesView from '@/views/SencesView'
+import ScenesView from '@/views/ScenesView'
 import ClusterView from '@/views/ClusterView'
 import CasesView from '@/views/CasesView'
 import HistoryView from '@/views/HistoryView'
@@ -32,9 +32,9 @@ export default new Router({
       component: DailyView
     },
     {
-      path: '/sences',
-      name: 'SencesView',
-      component: SencesView
+      path: '/scenes',
+      name: 'ScenesView',
+      component: ScenesView
     },
     {
       path: '/cluster',

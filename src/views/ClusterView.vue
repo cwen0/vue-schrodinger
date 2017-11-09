@@ -57,8 +57,8 @@
           <el-form-item label="TiKV Size:" prop="tikv">
             <el-input v-model.number="dialogData.clusterForm.tikv" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="ConfigMap:" prop="configmap">
-            <el-input v-model="dialogData.clusterForm.configmap"></el-input>
+          <el-form-item label="ConfigMap:" prop="config_map">
+            <el-input v-model="dialogData.clusterForm.config_map"></el-input>
           </el-form-item>
           <el-form-item label="Description:" prop="desc">
             <el-input v-model="dialogData.clusterForm.desc"></el-input>
@@ -92,7 +92,7 @@
         clusterCount: 0,
         tableData: {
           label: ["Name", "Creator", "PD Size", "TiDB Size", "TiKV Size", "ConfigMap", "Description"],
-          prop: ["name", "creator", "pd", "tidb", "tikv", "configmap"],
+          prop: ["name", "creator", "pd", "tidb", "tikv", "config_map"],
           list: [],
 
           handleClick: function (row) {
@@ -111,7 +111,7 @@
             pd: 3,
             tidb: 3,
             tikv: 5,
-            configmap: '',
+            config_map: '',
             desc: ''
           },
 
@@ -169,9 +169,9 @@
                 message: 'must number'
               }
             ],
-            configmap: [{
+            config_map: [{
                 required: true,
-                message: 'Please input configmap',
+                message: 'Please input config_map',
                 trigger: 'blur'
               },
               {
@@ -208,6 +208,15 @@
           type: 'warning'
         }).then(() => {
           ajax.deleteClusterTemplate(this.detail.name).then((result) => {
+            if (result.code != 200) {
+              this.$notify({
+                title: "ERROR",
+                type: 'error',
+                message: result.message,
+                duration: 0
+              });
+              return
+            }
             this.$notify({
               title: "SUCCESS",
               type: 'success',
@@ -217,7 +226,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.data,
+              message: resp.message,
               duration: 0
             });
           });
@@ -246,7 +255,7 @@
           pd: 3,
           tidb: 3,
           tikv: 5,
-          configmap: '',
+          config_map: '',
           desc: ''
         }
       },
@@ -285,9 +294,18 @@
           pd: this.dialogData.clusterForm.pd,
           tidb: this.dialogData.clusterForm.tidb,
           tikv: this.dialogData.clusterForm.tikv,
-          configmap: this.dialogData.clusterForm.configmap,
+          config_map: this.dialogData.clusterForm.config_map,
           desc: this.dialogData.clusterForm.desc
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
           this.dialog = false;
           this.tableData.list.push(result.data);
           this.$notify({
@@ -300,7 +318,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.data,
+            message: resp.message,
             duration: 0
           });
         })
@@ -314,9 +332,18 @@
           pd: this.dialogData.clusterForm.pd,
           tidb: this.dialogData.clusterForm.tidb,
           tikv: this.dialogData.clusterForm.tikv,
-          configmap: this.dialogData.clusterForm.configmap,
+          config_map: this.dialogData.clusterForm.config_map,
           desc: this.dialogData.clusterForm.desc
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
           this.dialog = false;
           //this.tableData.list.push(result.data);
           this.$notify({
@@ -334,7 +361,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.data,
+            message: resp.message,
             duration: 0
           });
         })

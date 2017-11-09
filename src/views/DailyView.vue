@@ -75,8 +75,8 @@
           list: [],
 
           handleClick: function (row) {
-            if(row == null) {
-              return 
+            if (row == null) {
+              return
             }
             ajax.getMissionByID(row.id).then((result) => {
               this.detail = result.data;
@@ -102,6 +102,15 @@
           type: 'warning'
         }).then(() => {
           ajax.stopMissionByID(this.detail.id).then((result) => {
+            if (result.code != 200) {
+              this.$notify({
+                title: "ERROR",
+                type: 'error',
+                message: result.message,
+                duration: 0
+              });
+              return
+            }
             this.$notify({
               title: "SUCCESS",
               type: 'success',
@@ -111,7 +120,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.data,
+              message: resp.message,
               duration: 0
             });
           });

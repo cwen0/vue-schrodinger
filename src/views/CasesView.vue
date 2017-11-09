@@ -71,8 +71,8 @@
           <el-form-item label="Source Type:" prop="source_type">
             <el-select v-model="caseForm.source_type" placeholder="select source type">
               <el-option label="git" value="git"></el-option>
-              <el-option label="binary" value="binary"></el-option>
-              <el-option label="docker" value="docker"></el-option>
+              <el-option label="bin" value="bin"></el-option>
+              <!-- <el-option label="docker" value="docker"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item label="Source URL:" prop="source_url">
@@ -81,8 +81,8 @@
           <el-form-item label="Git Value:" prop="git_value">
             <el-input v-model="caseForm.git_value"></el-input>
           </el-form-item>
-          <el-form-item label="Arg:" prop="arg">
-            <el-input v-model="caseForm.arg"></el-input>
+          <el-form-item label="Args:" prop="args">
+            <el-input v-model="caseForm.args"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -122,8 +122,8 @@
           <el-form-item label="Source Type:" prop="source_type">
             <el-select v-model="caseForm.source_type" placeholder="select source type">
               <el-option label="git" value="git"></el-option>
-              <el-option label="binary" value="binary"></el-option>
-              <el-option label="docker" value="docker"></el-option>
+              <el-option label="bin" value="bin"></el-option>
+              <!-- <el-option label="docker" value="docker"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item label="Source URL:" prop="source_url">
@@ -132,8 +132,8 @@
           <el-form-item label="Git Value:" prop="git_value">
             <el-input v-model="caseForm.git_value"></el-input>
           </el-form-item>
-          <el-form-item label="Arg:" prop="arg">
-            <el-input v-model="caseForm.arg"></el-input>
+          <el-form-item label="Arg:" prop="args">
+            <el-input v-model="caseForm.args"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -188,7 +188,7 @@
           source_type: '',
           source_url: '',
           git_value: '',
-          arg: ''
+          args: ''
         },
 
         rules: {
@@ -261,7 +261,7 @@
           creator: this.caseForm.creator,
           type: this.caseForm.type,
           desc: this.caseForm.desc,
-          arg: this.caseForm.arg,
+          args: this.caseForm.args,
           source: {
             binary_name: this.caseForm.binary_name,
             type: this.caseForm.source_type,
@@ -269,6 +269,16 @@
             git_value: this.caseForm.git_value
           }
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
+
           this.dialogCreateCaseTemplate = false;
           this.tableData.list.push(result.data);
           this.$notify({
@@ -281,7 +291,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.data,
+            message: resp.message,
             duration: 0
           });
         })
@@ -294,7 +304,7 @@
           creator: this.caseForm.creator,
           type: this.caseForm.type,
           desc: this.caseForm.desc,
-          arg: this.caseForm.arg,
+          args: this.caseForm.args,
           source: {
             binary_name: this.caseForm.binary_name,
             type: this.caseForm.source_type,
@@ -302,6 +312,16 @@
             git_value: this.caseForm.git_value
           }
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
+
           this.dialogUpdateCaseTemplate = false;
           //this.tableData.list.push(result.data);
           this.$notify({
@@ -319,7 +339,7 @@
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.data,
+            message: resp.message,
             duration: 0
           });
         })
@@ -360,6 +380,15 @@
           type: 'warning'
         }).then(() => {
           ajax.deleteCaseTemplate(this.detail.name).then((result) => {
+            if (result.code != 200) {
+              this.$notify({
+                title: "ERROR",
+                type: 'error',
+                message: resp.message,
+                duration: 0
+              });
+              return
+            }
             this.$notify({
               title: "SUCCESS",
               type: 'success',
@@ -369,7 +398,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.data,
+              message: resp.message,
               duration: 0
             });
           });
@@ -393,7 +422,7 @@
           source_type: this.detail.source.type,
           source_url: this.detail.source.url,
           git_value: this.detail.source.git_value,
-          arg: this.detail.arg
+          args: this.detail.args
         };
         this.dialogUpdateCaseTemplate = true;
       },
@@ -414,7 +443,7 @@
           source_type: '',
           source_url: '',
           git_value: '',
-          arg: ''
+          args: ''
         }
       }
     }

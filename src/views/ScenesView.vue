@@ -5,11 +5,11 @@
         <div class="sch-card-header">
           <div>
             <Strong>
-              <span>Count: {{sencesCount}}</span>
+              <span>Count: {{scenesCount}}</span>
             </Strong>
           </div>
           <div>
-            <el-button @click="clickCreateSences()">New</el-button>
+            <el-button @click="clickCreateScenes()">New</el-button>
           </div>
         </div>
         <sh-table :tableData="tableData"></sh-table>
@@ -18,7 +18,7 @@
     <div>
       <div v-show="isShow" class="sch-detail">
         <el-collapse v-model="activeNames">
-          <el-collapse-item title="Sences Detail" name="1">
+          <el-collapse-item title="Scenes Detail" name="1">
             <div class="sch-detail-header">
               <div class="sch-detail-summery">
                 <span>Sence Name:
@@ -26,9 +26,9 @@
                 </span>
               </div>
               <div>
-                <el-button @click="clickDeleteSences()">
+                <el-button @click="clickDeleteScenes()">
                   <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button>
-                <el-button @click="clickUpdateSences()">
+                <el-button @click="clickUpdateScenes()">
                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</el-button>
               </div>
             </div>
@@ -41,12 +41,12 @@
     </div>
     <div>
       <el-dialog :title="dialogData.title" :visible.sync="dialog">
-        <el-form :inline="true" :model="dialogData.sencesForm" ref="dialogData.sencesForm" label-width="6rem">
+        <el-form :inline="true" :model="dialogData.scenesForm" ref="dialogData.scenesForm" label-width="6rem">
           <el-form-item label="Name:" prop="name">
-            <el-input v-model="dialogData.sencesForm.name"></el-input>
+            <el-input v-model="dialogData.scenesForm.name"></el-input>
           </el-form-item>
           <el-form-item label="Creator:" prop="creator">
-            <el-input v-model="dialogData.sencesForm.creator"></el-input>
+            <el-input v-model="dialogData.scenesForm.creator"></el-input>
           </el-form-item>
           <div class="sch-boxes">
             <big>
@@ -56,7 +56,7 @@
             </big>
             <a class="sch-a" @click="addBox">Add Box</a>
           </div>
-          <div v-for="(box, index) in dialogData.sencesForm.boxes" :key="box.key">
+          <div v-for="(box, index) in dialogData.scenesForm.boxes" :key="box.key">
             <div class="sch-boxes">
               <label>Box{{index}}</label>
               <a class="sch-a" @click="removeBox(box)"> Remove </a>
@@ -69,8 +69,8 @@
                 <el-option v-for="(cluster, index) in clustersTemplate" :key="cluster.id" :label="cluster.name" :value="cluster.name"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="Cases Template:" :prop="'boxes.'+index + '.case_templates'"   >
-              <el-select v-model="box.case_templates" multiple placeholder="select cases template" style="width: 33rem;" >
+            <el-form-item label="Cases Template:" :prop="'boxes.'+index + '.case_templates'">
+              <el-select v-model="box.case_templates" multiple placeholder="select cases template" style="width: 33rem;">
                 <el-option v-for="item in casesTemplate" :key="item.id" :label="item.name" :value="item.name">
                 </el-option>
               </el-select>
@@ -78,9 +78,9 @@
           </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialog = false; clearSencesForm()">Cancel</el-button>
-          <el-button @click="resetForm('dialogData.sencesForm')">Reset</el-button>
-          <el-button @click="submitForm('dialogData.sencesForm', dialogData.type)">OK</el-button>
+          <el-button @click="dialog = false; clearScenesForm()">Cancel</el-button>
+          <el-button @click="resetForm('dialogData.scenesForm')">Reset</el-button>
+          <el-button @click="submitForm('dialogData.scenesForm', dialogData.type)">OK</el-button>
         </div>
       </el-dialog>
     </div>
@@ -95,13 +95,13 @@
       shTable
     },
 
-    name: 'sences',
+    name: 'scenes',
     data() {
       return {
         activeNames: ['1'],
         isShow: false,
         detail: '',
-        sencesCount: 0,
+        scenesCount: 0,
         clustersTemplate: [],
         casesTemplate: [],
         tableData: {
@@ -110,7 +110,7 @@
           list: [],
 
           handleClick: function (row) {
-            ajax.getSencesByName(row.name).then((result) => {
+            ajax.getScenesByName(row.name).then((result) => {
               this.detail = result.data;
               this.isShow = true;
             }).catch(() => {})
@@ -120,7 +120,7 @@
         dialog: false,
         dialogData: {
           title: '',
-          sencesForm: {
+          scenesForm: {
             name: '',
             creator: '',
             boxes: []
@@ -130,12 +130,12 @@
     },
 
     created() {
-      ajax.getSences().then((result) => {
+      ajax.getScenes().then((result) => {
         result.data.forEach(function (element) {
-          element.boxes_count = element.boxes.length;
+          element.boxes_count = Object.keys(element.boxes).length;
         });
         this.tableData.list = result.data;
-        this.sencesCount = this.tableData.list.length;
+        this.scenesCount = this.tableData.list.length;
       }).catch(() => {})
 
       ajax.getClustersTemplate().then((result) => {
@@ -148,34 +148,58 @@
     },
 
     methods: {
-      clickCreateSences: function () {
-        this.clearSencesForm();
-        this.dialogData.title = "Create New Sences";
+      clickCreateScenes: function () {
+        this.clearScenesForm();
+        this.dialogData.title = "Create New Scenes";
         this.dialogData.type = "new";
         this.dialogData.boxes = null;
         this.dialog = true;
         return;
       },
-      clickUpdateSences: function () {
+      clickUpdateScenes: function () {
+        var boxes = [];
+        Object.values(this.detail.boxes).forEach(function (e) {
+          var cases = [];
+          Object.values(e.cases).forEach(function (c) {
+            cases.push(c.name);
+          })
+
+          boxes.push({
+            "name": e.name,
+            "cluster_template": e.cluster.name,
+            "case_templates": cases
+          })
+        })
+
         this.dialogData = Object.assign({}, this.dialogData, {
-          title: "Update Sences",
+          title: "Update Scenes",
           type: "update",
-          sencesForm: {
+          scenesForm: {
             name: this.detail.name,
             creator: this.detail.creator,
-            boxes: this.detail.boxes
+            boxes: boxes
           }
         })
+
         this.dialog = true;
       },
 
-      clickDeleteSences: function () {
-        this.$confirm('This will delete this Sences, continue?', 'Warning', {
+      clickDeleteScenes: function () {
+        this.$confirm('This will delete this Scenes, continue?', 'Warning', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          ajax.deleteSences(this.detail.name).then((result) => {
+          ajax.deleteScenes(this.detail.name).then((result) => {
+            if (result != 200) {
+              this.$notify({
+                title: "ERROR",
+                type: 'error',
+                message: result.message,
+                duration: 0
+              });
+              return
+            }
             this.$notify({
               title: "SUCCESS",
               type: 'success',
@@ -185,7 +209,7 @@
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: resp.data,
+              message: resp.message,
               duration: 0
             });
           });
@@ -199,8 +223,8 @@
         return;
       },
 
-      clearSencesForm: function () {
-        this.dialogData.sencesForm = {
+      clearScenesForm: function () {
+        this.dialogData.scenesForm = {
           name: '',
           creator: '',
           boxes: []
@@ -214,7 +238,7 @@
       },
 
       addBox: function () {
-        this.dialogData.sencesForm.boxes.push({
+        this.dialogData.scenesForm.boxes.push({
           key: Date.now(),
           name: '',
           cluster_template: '',
@@ -223,9 +247,9 @@
       },
 
       removeBox: function (item) {
-        var index = this.dialogData.sencesForm.boxes.indexOf(item)
+        var index = this.dialogData.scenesForm.boxes.indexOf(item)
         if (index !== -1) {
-          this.dialogData.sencesForm.boxes.splice(index, 1)
+          this.dialogData.scenesForm.boxes.splice(index, 1)
         }
       },
 
@@ -234,10 +258,10 @@
           if (valid) {
             switch (type) {
               case "new":
-                this.createSences();
+                this.createScenes();
                 break
               case "update":
-                this.updateSences();
+                this.updateScenes();
                 break
               default:
                 alert("Error");
@@ -250,56 +274,74 @@
         });
       },
 
-      createSences: function () {
-        ajax.setSences({
-          name: this.dialogData.sencesForm.name,
-          creator: this.dialogData.sencesForm.creator,
-          boxes: this.dialogData.sencesForm.boxes
+      createScenes: function () {
+        ajax.setScenes({
+          name: this.dialogData.scenesForm.name,
+          creator: this.dialogData.scenesForm.creator,
+          boxes: this.dialogData.scenesForm.boxes
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
           this.dialog = false;
-          result.data.boxes_count = this.dialogData.sencesForm.boxes.length;
+          result.data.boxes_count = Object.keys(element.boxes).length;
           this.tableData.list.push(result.data);
           this.$notify({
             title: "SUCCESS",
             type: 'success',
-            message: 'Create Sences Success!'
+            message: 'Create Scenes Success!'
           });
-          this.clearSencesForm();
+          this.clearScenesForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.data,
+            message: resp.message,
             duration: 0
           });
         })
       },
 
-      updateSences: function () {
-        ajax.setSences({
+      updateScenes: function () {
+        ajax.setScenes({
           id: this.detail.id,
-          name: this.dialogData.sencesForm.name,
-          creator: this.dialogData.sencesForm.creator,
-          boxes: this.dialogData.sencesForm.boxes
+          name: this.dialogData.scenesForm.name,
+          creator: this.dialogData.scenesForm.creator,
+          boxes: this.dialogData.scenesForm.boxes
         }).then((result) => {
+          if (result.code != 200) {
+            this.$notify({
+              title: "ERROR",
+              type: 'error',
+              message: result.message,
+              duration: 0
+            });
+            return
+          }
           this.dialog = false;
           this.$notify({
             title: "SUCCESS",
             type: 'success',
-            message: 'Update Sences Success!'
+            message: 'Update Scenes Success!'
           });
 
-          var index = this.tableData.list.indexOf(this.dialogData.sencesForm);
+          var index = this.tableData.list.indexOf(this.dialogData.scenesForm);
           if (index !== -1) {
-            this.tableData.list[index] = this.dialogData.sencesForm;
-            this.detail = this.dialogData.sencesForm;
+            this.tableData.list[index] = this.dialogData.scenesForm;
+            this.detail = this.dialogData.scenesForm;
           }
-          this.clearSencesForm();
+          this.clearScenesForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
             type: 'error',
-            message: resp.data,
+            message: resp.message,
             duration: 0
           });
         })
