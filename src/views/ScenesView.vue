@@ -48,6 +48,9 @@
           <el-form-item label="Creator:" prop="creator">
             <el-input v-model="dialogData.scenesForm.creator"></el-input>
           </el-form-item>
+          <el-form-item label="Desc:" prop="desc">
+            <el-input v-model="dialogData.scenesForm.desc"></el-input>
+          </el-form-item>
           <div class="sch-boxes">
             <big>
               <strong>
@@ -111,7 +114,7 @@
 
           handleClick: function (row) {
             ajax.getScenesByName(row.name).then((result) => {
-              this.detail = result.data;
+              this.detail = result.data.data;
               this.isShow = true;
             }).catch(() => {})
           }.bind(this)
@@ -123,6 +126,7 @@
           scenesForm: {
             name: '',
             creator: '',
+            desc: '',
             boxes: []
           }
         }
@@ -131,19 +135,19 @@
 
     created() {
       ajax.getScenes().then((result) => {
-        result.data.forEach(function (element) {
+        result.data.data.forEach(function (element) {
           element.boxes_count = Object.keys(element.boxes).length;
         });
-        this.tableData.list = result.data;
+        this.tableData.list = result.data.data;
         this.scenesCount = this.tableData.list.length;
       }).catch(() => {})
 
       ajax.getClustersTemplate().then((result) => {
-        this.clustersTemplate = result.data;
+        this.clustersTemplate = result.data.data;
       }).catch(() => {})
 
       ajax.getCasesTemplate().then((result) => {
-        this.casesTemplate = result.data;
+        this.casesTemplate = result.data.data;
       }).catch(() => {})
     },
 
@@ -177,6 +181,7 @@
           scenesForm: {
             name: this.detail.name,
             creator: this.detail.creator,
+            desc: this.detail.desc,
             boxes: boxes
           }
         })
@@ -191,11 +196,11 @@
           type: 'warning'
         }).then(() => {
           ajax.deleteScenes(this.detail.name).then((result) => {
-            if (result != 200) {
+            if (result.data.code != 200) {
               this.$notify({
                 title: "ERROR",
                 type: 'error',
-                message: result.message,
+                message: result.data.message,
                 duration: 0
               });
               return
@@ -278,20 +283,24 @@
         ajax.setScenes({
           name: this.dialogData.scenesForm.name,
           creator: this.dialogData.scenesForm.creator,
+          desc: this.dialogData.scenesForm.desc,
           boxes: this.dialogData.scenesForm.boxes
         }).then((result) => {
-          if (result.code != 200) {
+          // console.log(result);
+          //debugger;
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
           }
           this.dialog = false;
-          result.data.boxes_count = Object.keys(element.boxes).length;
-          this.tableData.list.push(result.data);
+          result.data.data.boxes_count = Object.keys(result.data.data.boxes).length;
+          this.tableData.list.unshift(result.data.data);
+          this.scenesCount = this.tableData.list.length;
           this.$notify({
             title: "SUCCESS",
             type: 'success',
@@ -313,13 +322,15 @@
           id: this.detail.id,
           name: this.dialogData.scenesForm.name,
           creator: this.dialogData.scenesForm.creator,
+          desc: this.dialogData.scenesForm.desc,
           boxes: this.dialogData.scenesForm.boxes
         }).then((result) => {
-          if (result.code != 200) {
+          //      console.log(result.data);
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
@@ -331,12 +342,14 @@
             message: 'Update Scenes Success!'
           });
 
-          var index = this.tableData.list.indexOf(this.dialogData.scenesForm);
-          if (index !== -1) {
-            this.tableData.list[index] = this.dialogData.scenesForm;
-            this.detail = this.dialogData.scenesForm;
-          }
-          this.clearScenesForm();
+          ajax.getScenes().then((result) => {
+            result.data.data.forEach(function (element) {
+              element.boxes_count = Object.keys(element.boxes).length;
+            });
+            this.tableData.list = result.data.data;
+            this.scenesCount = this.tableData.list.length;
+          }).catch(() => {})
+          this.isShow = false;
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",

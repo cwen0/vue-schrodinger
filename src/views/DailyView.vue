@@ -70,18 +70,22 @@
         missionCount: 0,
         period: "daily",
         tableData: {
-          label: ['Mission', 'Status', 'Start Time'],
-          prop: ['name', 'status', 'start_time'],
+          label: ['Mission ID','Mission Name', 'Status','Scenes', 'Create Time'],
+          prop: ['id','name', 'status','scenes.name', 'scenes.create_time'],
           list: [],
 
           handleClick: function (row) {
             if (row == null) {
               return
             }
-            ajax.getMissionByID(row.id).then((result) => {
-              this.detail = result.data;
-              this.isShow = true;
+
+            ajax.getMissionReportByID(row.id).then((result) => {
+              this.detail = result.data.data;
+              this.detail.scenes_name = row.scenes.name;
+              this.detail.status = row.status;
             }).catch(() => {})
+
+            this.isShow = true;
           }.bind(this)
         },
       }
@@ -89,7 +93,7 @@
 
     created() {
       ajax.getMissionByPeriod(this.period).then((result) => {
-        this.tableData.list = result.data;
+        this.tableData.list = result.data.data;
         this.missionCount = this.tableData.list.length;
       }).catch(() => {})
     },
@@ -102,11 +106,11 @@
           type: 'warning'
         }).then(() => {
           ajax.stopMissionByID(this.detail.id).then((result) => {
-            if (result.code != 200) {
+            if (result.data.code != 200) {
               this.$notify({
                 title: "ERROR",
                 type: 'error',
-                message: result.message,
+                message: result.data.message,
                 duration: 0
               });
               return
@@ -137,7 +141,7 @@
     watch: {
       period: function (val) {
         ajax.getMissionByPeriod(val).then((result) => {
-          this.tableData.list = result.data;
+          this.tableData.list = result.data.data;
           this.missionCount = this.tableData.list.length;
           this.detail = '';
           this.isShow = false;

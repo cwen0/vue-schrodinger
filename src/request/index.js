@@ -223,12 +223,25 @@ class Ajax {
     return axios.get(`${Proxy}/mission`)
   }
 
-  getMissionByID(id) {
+  getMissionReportByID(id) {
+    return axios.get(`${Proxy}/mission/${id}/report`)
+  }
+
+  getMissionDetailByID(id) {
     return axios.get(`${Proxy}/mission/${id}`)
   }
 
   stopMissionByID(id) {
-    return axios.get(`${Proxy}/mission/${id}/stop`)
+    return axios.post(`${Proxy}/mission/${id}/stop`)
+  }
+
+  startMission(data) {
+    console.log(data);
+    return axios.post(`${Proxy}/mission`, data)
+  }
+
+  updateMission(data) {
+    return axios.put(`${Proxy}/mission/${data.id}`, data)
   }
 
   getCasesTemplate() {
@@ -239,8 +252,12 @@ class Ajax {
     return axios.get(`${Proxy}/case/template/${name}`)
   }
 
-  setCaseTemplate(data) {
+  createCaseTemplate(data) {
     return axios.post(`${Proxy}/case/template`, data)
+  }
+
+  updateCaseTemplate(data) {
+    return axios.put(`${Proxy}/case/template`, data)
   }
 
   deleteCaseTemplate(name) {
@@ -280,15 +297,16 @@ class Ajax {
   }
 
   searchMission(filter) {
-    return axios.get(`${Proxy}/mission/filter`, filter)
+    return axios.post(`${Proxy}/mission/filter`, filter)
   }
 
   getMissionByPeriod(period) {
-    return axios.get(`${Proxy}/mission/${period}`)
+    return axios.get(`${Proxy}/mission/period/${period}`)
   }
 
   release(data) {
-    return axios.get(`${Proxy}/release`, data)
+    console.log(data);
+    return axios.post(`${Proxy}/release`, data)
   }
 }
 export default new Ajax()

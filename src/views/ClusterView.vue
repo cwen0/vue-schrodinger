@@ -96,8 +96,11 @@
           list: [],
 
           handleClick: function (row) {
+            if (row == null) {
+              return;
+            }
             ajax.getClusterTemplateByName(row.name).then((result) => {
-              this.detail = result.data;
+              this.detail = result.data.data;
               this.isShow = true;
             }).catch(() => {})
           }.bind(this)
@@ -188,7 +191,7 @@
 
     created() {
       ajax.getClustersTemplate().then((result) => {
-        this.tableData.list = result.data;
+        this.tableData.list = result.data.data;
         this.clusterCount = this.tableData.list.length;
       }).catch(() => {})
     },
@@ -208,11 +211,11 @@
           type: 'warning'
         }).then(() => {
           ajax.deleteClusterTemplate(this.detail.name).then((result) => {
-            if (result.code != 200) {
+            if (result.data.code != 200) {
               this.$notify({
                 title: "ERROR",
                 type: 'error',
-                message: result.message,
+                message: result.data.message,
                 duration: 0
               });
               return
@@ -297,17 +300,18 @@
           config_map: this.dialogData.clusterForm.config_map,
           desc: this.dialogData.clusterForm.desc
         }).then((result) => {
-          if (result.code != 200) {
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
           }
           this.dialog = false;
-          this.tableData.list.push(result.data);
+          this.tableData.list.unshift(result.data.data);
+          this.clusterCount = this.tableData.list.length;
           this.$notify({
             title: "SUCCESS",
             type: 'success',
@@ -335,28 +339,27 @@
           config_map: this.dialogData.clusterForm.config_map,
           desc: this.dialogData.clusterForm.desc
         }).then((result) => {
-          if (result.code != 200) {
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
           }
           this.dialog = false;
-          //this.tableData.list.push(result.data);
+          //this.tableData.list.unshift(result.data);
           this.$notify({
             title: "SUCCESS",
             type: 'success',
             message: 'Update Cluster Template Success!'
           });
-          var index = this.tableData.list.indexOf(this.dialogData.clusterForm);
-          if (index !== -1) {
-            this.tableData.list[index] = this.dialogData.clusterForm;
-            this.detail = this.dialogData.clusterForm;
-          }
-          //this.clearClusterForm();
+          ajax.getClustersTemplate().then((result) => {
+            this.tableData.list = result.data.data;
+            this.clusterCount = this.tableData.list.length;
+          }).catch(() => {})
+          this.isShow = false;
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",

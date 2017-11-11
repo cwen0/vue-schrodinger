@@ -6,6 +6,7 @@ import ClusterView from '@/views/ClusterView'
 import CasesView from '@/views/CasesView'
 import HistoryView from '@/views/HistoryView'
 import ReleaseView from '@/views/ReleaseView'
+import MissionViw from '@/views/MissionView'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/daily',
       name: 'DailyView',
       component: DailyView
+    },
+    {
+      path: '/mission', 
+      name: 'MissionView', 
+      component: MissionViw
     },
     {
       path: '/scenes',

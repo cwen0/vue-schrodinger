@@ -75,11 +75,14 @@
               <!-- <el-option label="docker" value="docker"></el-option> -->
             </el-select>
           </el-form-item>
-          <el-form-item label="Source URL:" prop="source_url">
-            <el-input v-model="caseForm.source_url"></el-input>
+          <el-form-item label="Git Repo:" prop="git_repo">
+            <el-input v-model="caseForm.git_repo"></el-input>
           </el-form-item>
           <el-form-item label="Git Value:" prop="git_value">
             <el-input v-model="caseForm.git_value"></el-input>
+          </el-form-item>
+          <el-form-item label="Binary URL:" prop="source_url">
+            <el-input v-model="caseForm.source_url"></el-input>
           </el-form-item>
           <el-form-item label="Args:" prop="args">
             <el-input v-model="caseForm.args"></el-input>
@@ -126,11 +129,14 @@
               <!-- <el-option label="docker" value="docker"></el-option> -->
             </el-select>
           </el-form-item>
-          <el-form-item label="Source URL:" prop="source_url">
-            <el-input v-model="caseForm.source_url"></el-input>
+          <el-form-item label="Git Repo:" prop="git_repo">
+            <el-input v-model="caseForm.git_repo"></el-input>
           </el-form-item>
           <el-form-item label="Git Value:" prop="git_value">
             <el-input v-model="caseForm.git_value"></el-input>
+          </el-form-item>
+          <el-form-item label="Binary URL:" prop="source_url">
+            <el-input v-model="caseForm.source_url"></el-input>
           </el-form-item>
           <el-form-item label="Arg:" prop="args">
             <el-input v-model="caseForm.args"></el-input>
@@ -163,6 +169,7 @@
         activeNames: ['1'],
         isShow: false,
         detail: '',
+        lastDetail: '',
         caseCount: 0,
         tableData: {
           label: ["Name", "Creator", "Create Time", "Type"],
@@ -170,9 +177,13 @@
           list: [],
 
           handleClick: function (row) {
+            if (row == null) {
+              return;
+            }
             ajax.getCaseTemplateByName(row.name).then((result) => {
-              this.detail = result.data;
+              this.detail = result.data.data;
               this.isShow = true;
+              this.lastDetail = row;
             }).catch(() => {})
           }.bind(this)
         },
@@ -187,6 +198,7 @@
           binary_name: '',
           source_type: '',
           source_url: '',
+          git_repo: '',
           git_value: '',
           args: ''
         },
@@ -249,14 +261,14 @@
 
     created() {
       ajax.getCasesTemplate().then((result) => {
-        this.tableData.list = result.data;
+        this.tableData.list = result.data.data;
         this.caseCount = this.tableData.list.length;
       }).catch(() => {})
     },
 
     methods: {
       createCaseTemplate: function () {
-        ajax.setCaseTemplate({
+        ajax.createCaseTemplate({
           name: this.caseForm.name,
           creator: this.caseForm.creator,
           type: this.caseForm.type,
@@ -265,22 +277,25 @@
           source: {
             binary_name: this.caseForm.binary_name,
             type: this.caseForm.source_type,
-            url: this.caseForm.source_url,
-            git_value: this.caseForm.git_value
+            git_repo: this.caseForm.git_repo,
+            git_value: this.caseForm.git_value,
+            url: this.caseForm.source_url
           }
         }).then((result) => {
-          if (result.code != 200) {
+          console.log(result);
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
           }
 
           this.dialogCreateCaseTemplate = false;
-          this.tableData.list.push(result.data);
+          this.tableData.list.unshift(result.data.data);
+          this.caseCount = this.tableData.list.length;
           this.$notify({
             title: "SUCCESS",
             type: 'success',
@@ -298,43 +313,45 @@
       },
 
       updateCaseTemplate: function () {
-        ajax.setCaseTemplate({
+        ajax.updateCaseTemplate({
           id: this.detail.id,
           name: this.caseForm.name,
           creator: this.caseForm.creator,
+          create_time: this.detail.create_time,
           type: this.caseForm.type,
           desc: this.caseForm.desc,
           args: this.caseForm.args,
           source: {
             binary_name: this.caseForm.binary_name,
             type: this.caseForm.source_type,
-            url: this.caseForm.source_url,
-            git_value: this.caseForm.git_value
+            git_repo: this.caseForm.git_repo,
+            git_value: this.caseForm.git_value,
+            url: this.caseForm.source_url
           }
         }).then((result) => {
-          if (result.code != 200) {
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
           }
 
           this.dialogUpdateCaseTemplate = false;
-          //this.tableData.list.push(result.data);
+          //this.tableData.list.unshift(result.data);
           this.$notify({
             title: "SUCCESS",
             type: 'success',
             message: 'Update Case Template Success!'
           });
-          var index = this.tableData.list.indexOf(this.dialogData.caseForm);
-          if (index !== -1) {
-            this.tableData.list[index] = this.dialogData.caseForm;
-            this.detail = this.dialogData.caseForm;
-          }
-          this.clearCaseForm()
+          ajax.getCasesTemplate().then((result) => {
+            this.tableData.list = result.data.data;
+            this.caseCount = this.tableData.list.length;
+          }).catch(() => {})
+          this.isShow = false;
+          this.clearCaseForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
@@ -380,11 +397,11 @@
           type: 'warning'
         }).then(() => {
           ajax.deleteCaseTemplate(this.detail.name).then((result) => {
-            if (result.code != 200) {
+            if (result.data.code != 200) {
               this.$notify({
                 title: "ERROR",
                 type: 'error',
-                message: resp.message,
+                message: result.data.message,
                 duration: 0
               });
               return
@@ -420,16 +437,17 @@
           desc: this.detail.desc,
           binary_name: this.detail.source.binary_name,
           source_type: this.detail.source.type,
-          source_url: this.detail.source.url,
+          git_repo: this.detail.source.git_repo,
           git_value: this.detail.source.git_value,
-          args: this.detail.args
+          args: this.detail.args,
+          source_url: this.detail.source.url
         };
         this.dialogUpdateCaseTemplate = true;
       },
 
       clickCreateCaseTemplate: function () {
         this.clearCaseForm();
-        this.resetForm('caseForm')
+        this.resetForm('caseForm');
         this.dialogCreateCaseTemplate = true;
       },
 
@@ -441,9 +459,10 @@
           desc: '',
           binary_name: '',
           source_type: '',
-          source_url: '',
+          git_repo: '',
           git_value: '',
-          args: ''
+          args: '',
+          source_url: ''
         }
       }
     }

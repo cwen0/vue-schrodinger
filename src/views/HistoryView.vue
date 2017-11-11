@@ -73,18 +73,20 @@
         isShow: false,
         detail: '',
         tableData: {
-          label: ['Mission', 'Status', 'Start Time'],
-          prop: ['name', 'status', 'start_time'],
+          label: ['Mission ID', 'Mission Name', 'Status','Scenes', 'Create Time'],
+          prop: ['id', 'name', 'status','scenes.name', 'scenes.create_time'],
           list: [],
 
           handleClick: function (row) {
             if (row == null) {
               return
             }
-            ajax.getMissionByID(row.id).then((result) => {
-              this.detail = result.data;
-              this.isShow = true;
+            ajax.getMissionReportByID(row.id).then((result) => {
+              this.detail = result.data.data;
+              this.detail.scenes_name = row.scenes.name;
+              this.detail.status = row.status;
             }).catch(() => {})
+            this.isShow = true;
           }.bind(this)
         },
 
@@ -100,7 +102,7 @@
 
     created() {
       ajax.getMissions().then((result) => {
-        this.tableData.list = result.data;
+        this.tableData.list = result.data.data;
         this.missionCount = this.tableData.list.length;
       }).catch(() => {})
     },
@@ -150,20 +152,21 @@
         }
 
         ajax.searchMission({
-          pd: pd,
-          tidb: tidb,
-          tikv: tikv
+          pd_version: pd,
+          tidb_version: tidb,
+          tikv_version: tikv
         }).then((result) => {
-          if (result.code != 200) {
+          if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
               type: 'error',
-              message: result.message,
+              message: result.data.message,
               duration: 0
             });
             return
           }
-          this.tableData.list = result.data;
+
+          this.tableData.list = result.data.data;
           this.missionCount = this.tableData.list.length;
           // this.$refs.singleTable.setCurrentRow();
           this.detail = '';
