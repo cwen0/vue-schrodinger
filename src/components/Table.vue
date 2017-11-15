@@ -1,7 +1,9 @@
 <template>
   <div>
-    <el-table ref="singleTable" :data="data.list" highlight-current-row @current-change="handleCurrentChange" style="width: 100%">
-      <el-table-column v-for="(item, index) in data.prop" :key="index" :prop="item" :label="data.label[index]">
+    <el-table ref="singleTable" :data="data.list" highlight-current-row 
+    @current-change="handleCurrentChange" style="width: 100%">
+      <el-table-column v-for="(item, index) in data.prop" :key="index" 
+      :prop="item" :label="data.label[index]">
       </el-table-column>
     </el-table>
   </div>

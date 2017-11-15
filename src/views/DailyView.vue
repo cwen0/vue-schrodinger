@@ -71,7 +71,7 @@
         period: "daily",
         tableData: {
           label: ['Mission ID','Mission Name', 'Status','Scenes', 'Create Time'],
-          prop: ['id','name', 'status','scenes.name', 'scenes.create_time'],
+          prop: ['id','name', 'status','scenes.name', 'create_time'],
           list: [],
 
           handleClick: function (row) {

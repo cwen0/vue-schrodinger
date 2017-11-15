@@ -107,7 +107,7 @@
         scenes: [],
         tableData: {
           label: ['Mission ID', 'Mission Name', 'Status', 'Scenes', 'Create Time','Slack Channel'],
-          prop: ['id', 'name', 'status', 'scenes.name', 'scenes.create_time', 'messager.callback'],
+          prop: ['id', 'name', 'status', 'scenes.name', 'create_time', 'messager.callback'],
           list: [],
 
           handleClick: function (row) {
