@@ -26,8 +26,8 @@
                 </span>
               </div>
               <div>
-                <el-button @click="clickDeleteScenes()">
-                  <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button>
+                <!-- <el-button @click="clickDeleteScenes()">
+                  <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button> -->
                 <el-button @click="clickUpdateScenes()">
                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</el-button>
               </div>

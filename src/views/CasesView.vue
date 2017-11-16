@@ -28,8 +28,8 @@
               </span>
             </div>
             <div>
-              <el-button @click="clickDeleteCaseTemplate()">
-                <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button>
+              <!-- <el-button @click="clickDeleteCaseTemplate()">
+                <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button> -->
               <el-button @click="clickUpdateCaseTemplate()">
                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</el-button>
             </div>
