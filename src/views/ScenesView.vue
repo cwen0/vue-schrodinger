@@ -108,8 +108,8 @@
         clustersTemplate: [],
         casesTemplate: [],
         tableData: {
-          label: ["Name", "Creator", "Create Time", "Boxes Count"],
-          prop: ["name", "creator", "create_time", "boxes_count"],
+          label: ["Name", "Creator", "Update Time", "Boxes Count"],
+          prop: ["name", "creator", "update_time", "boxes_count"],
           list: [],
 
           handleClick: function (row) {

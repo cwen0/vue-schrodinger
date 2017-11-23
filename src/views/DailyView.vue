@@ -70,8 +70,8 @@
         missionCount: 0,
         period: "daily",
         tableData: {
-          label: ['Mission ID','Mission Name', 'Status','Scenes', 'Create Time'],
-          prop: ['id','name', 'status','scenes.name', 'create_time'],
+          label: ['Mission ID', 'Mission Name', 'Status', 'Scenes', 'Update Time'],
+          prop: ['id', 'name', 'status', 'scenes.name', 'update_time'],
           list: [],
 
           handleClick: function (row) {
@@ -83,6 +83,20 @@
               this.detail = result.data.data;
               this.detail.scenes_name = row.scenes.name;
               this.detail.status = row.status;
+              this.detail.name = row.name;
+            }).catch(() => {})
+
+            ajax.getMissionDetailByID(row.id).then((result) => {
+              this.detail.name = result.data.data.name;
+              this.detail.pd_version = result.data.data.pd_version;
+              this.detail.tidb_version = result.data.data.tidb_version;
+              this.detail.tikv_version = result.data.data.tikv_version;
+              this.detail.timeout = result.data.data.timeout;
+              if (result.data.data.messager.callback == "") {
+                this.detail.slack_channel = "#stability_tester"
+              } else {
+                this.detail.slack_channel = result.data.data.messager.callback;
+              }
             }).catch(() => {})
 
             this.isShow = true;

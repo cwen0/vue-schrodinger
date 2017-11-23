@@ -172,8 +172,8 @@
         lastDetail: '',
         caseCount: 0,
         tableData: {
-          label: ["Name", "Creator", "Create Time", "Type"],
-          prop: ["name", "creator", "create_time", "type"],
+          label: ["Name", "Creator", "Update Time", "Type"],
+          prop: ["name", "creator", "update_time", "type"],
           list: [],
 
           handleClick: function (row) {

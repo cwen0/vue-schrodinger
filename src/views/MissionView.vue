@@ -106,8 +106,8 @@
         detail: '',
         scenes: [],
         tableData: {
-          label: ['Mission ID', 'Mission Name', 'Status', 'Scenes', 'Create Time','Slack Channel'],
-          prop: ['id', 'name', 'status', 'scenes.name', 'create_time', 'messager.callback'],
+          label: ['Mission ID', 'Mission Name', 'Status', 'Scenes', 'Update Time','Slack Channel'],
+          prop: ['id', 'name', 'status', 'scenes.name', 'update_time', 'messager.callback'],
           list: [],
 
           handleClick: function (row) {
@@ -121,6 +121,19 @@
               this.detail.status = row.status;
               this.detail.slack_channel = row.messager.callback;
               this.detail.id = row.id;
+            }).catch(() => {})
+
+            ajax.getMissionDetailByID(row.id).then((result) => {
+              this.detail.name = result.data.data.name;
+              this.detail.pd_version = result.data.data.pd_version;
+              this.detail.tidb_version = result.data.data.tidb_version;
+              this.detail.tikv_version = result.data.data.tikv_version;
+              this.detail.timeout = result.data.data.timeout;
+              if (result.data.data.messager.callback == "") {
+                this.detail.slack_channel = "#stability_tester"
+              } else {
+                this.detail.slack_channel = result.data.data.messager.callback;
+              }
             }).catch(() => {})
 
             this.isShow = true;

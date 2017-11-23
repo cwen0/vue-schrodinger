@@ -64,6 +64,9 @@ a:hover {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  max-width: 80%;
+  margin: 0 auto;
+
 }
 
 .svg-icon {
@@ -90,6 +93,7 @@ a:hover {
 .card {
   display: flex;
   flex-flow: row;
+  width: 100%;
 }
 
 .sch-card-header {
@@ -102,6 +106,7 @@ a:hover {
 
 .sch-detail {
   margin-top: 2rem; // display: flex; 
+  width: 100%;
 }
 
 .sch-detail-header {
@@ -123,4 +128,13 @@ a:hover {
 .sch-detail-body {
   border: 1px solid #d1dbe5;
   padding: 0 1rem 0 1rem;
+}
+
+pre{
+  white-space: pre-wrap;       /* Since CSS 2.1 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+  width: 100%;
 }
