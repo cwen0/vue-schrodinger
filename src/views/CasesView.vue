@@ -36,9 +36,7 @@
           </div>
           <div class="sch-detail-body">
             <pre>
-                <code>
                   {{detail}}
-                </code>
               </pre>
           </div>
         </el-collapse-item>
