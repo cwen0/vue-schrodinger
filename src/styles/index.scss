@@ -60,13 +60,8 @@ a:hover {
 
 .app-container {
   padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  max-width: 80%;
+  max-width: 65%;
   margin: 0 auto;
-
 }
 
 .svg-icon {
@@ -87,7 +82,7 @@ a:hover {
 }
 
 .box-card {
-  width: 80rem;
+  width: 100%;
 }
 
 .card {
@@ -137,4 +132,19 @@ pre{
   white-space: -o-pre-wrap;    /* Opera 7 */
   word-wrap: break-word;       /* Internet Explorer 5.5+ */
   width: 100%;
+  overflow: auto;
+  border-radius: 3px;
+  display: block;
+}
+
+code {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
 }

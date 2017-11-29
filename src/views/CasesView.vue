@@ -35,7 +35,11 @@
             </div>
           </div>
           <div class="sch-detail-body">
-            <pre>{{detail}}</pre>
+            <pre>
+                <code>
+                  {{detail}}
+                </code>
+              </pre>
           </div>
         </el-collapse-item>
       </el-collapse>
