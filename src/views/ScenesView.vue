@@ -78,6 +78,9 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="Lables:" :prop="'boxes.'+index + '.labels'"> 
+               <el-input v-model="box.labels"></el-input>
+            </el-form-item>
           </div>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -113,6 +116,10 @@
           list: [],
 
           handleClick: function (row) {
+            if (row == null) {
+              return;
+            }
+
             ajax.getScenesByName(row.name).then((result) => {
               this.detail = result.data.data;
               this.isShow = true;
@@ -168,10 +175,25 @@
             cases.push(c.name);
           })
 
+          var labelsToStr = function(labels) {
+            var str = "";   
+            var count = 0; 
+            for(var key in labels) {
+              if(count == 0) {
+                  str += key+"="+labels[key]
+              } else {
+                  str += ","+key+"="+labels[key]
+              }
+              count++;
+            }
+            return str 
+          }
+
           boxes.push({
             "name": e.name,
             "cluster_template": e.cluster.name,
-            "case_templates": cases
+            "case_templates": cases, 
+            "labels": labelsToStr(e.labels)
           })
         })
 
@@ -247,7 +269,8 @@
           key: Date.now(),
           name: '',
           cluster_template: '',
-          case_templates: []
+          case_templates: [],
+          labels: ''
         });
       },
 
@@ -350,6 +373,7 @@
             this.scenesCount = this.tableData.list.length;
           }).catch(() => {})
           this.isShow = false;
+          this.clearScenesForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
