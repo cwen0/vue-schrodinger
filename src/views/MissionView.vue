@@ -132,6 +132,7 @@
               this.detail.tidb_version = result.data.data.tidb_version;
               this.detail.tikv_version = result.data.data.tikv_version;
               this.detail.timeout = result.data.data.timeout;
+              this.detail.ignore_errors = result.data.data.ignore_errors;
               if (result.data.data.messager.callback == "") {
                 this.detail.slack_channel = "#stability_tester"
               } else {
