@@ -76,6 +76,9 @@
           <el-form-item label="Timeout:" prop="timeout">
             <el-input v-model="dialogData.missionForm.timeout"></el-input>
           </el-form-item>
+          <el-form-item label="IgnoreErrors:" prop="ignore_errors">
+            <el-input v-model="dialogData.missionForm.ignore_errors"></el-input>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialog = false; clearMissionForm()">Cancel</el-button>
@@ -150,7 +153,8 @@
             tidb_version: '',
             tikv_version: '',
             slack_channel: '',
-            timeout: ''
+            timeout: '',
+            ignore_errors: '',
           },
           type: '',
           missionRules: {
@@ -222,6 +226,18 @@
             timeout: [{
                 required: true,
                 message: 'Please input name',
+                trigger: 'blur'
+              },
+              {
+                min: 1,
+                max: 64,
+                message: 'Length should be 1 to 64',
+                trigger: 'blur'
+              }
+            ],
+            ignore_errors: [{
+                required: false,
+                message: 'Please input ignore error',
                 trigger: 'blur'
               },
               {
