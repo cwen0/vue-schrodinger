@@ -170,10 +170,10 @@
       clickUpdateScenes: function () {
         var boxes = [];
         Object.values(this.detail.boxes).forEach(function (e) {
-          var cases = [];
-          Object.values(e.cases).forEach(function (c) {
-            cases.push(c.name);
-          })
+          // var cases = [];
+          // Object.values(e.cases).forEach(function (c) {
+          //   cases.push(c.name);
+          // })
 
           var labelsToStr = function(labels) {
             var str = "";   
@@ -191,8 +191,8 @@
 
           boxes.push({
             "name": e.name,
-            "cluster_template": e.cluster.name,
-            "case_templates": cases, 
+            "cluster_template": e.cluster_template,
+            "case_templates": e.case_templates, 
             "labels": labelsToStr(e.labels)
           })
         })
