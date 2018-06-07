@@ -52,6 +52,11 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+    <div id="pagination">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+      :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" background :total="missionCount">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -69,6 +74,8 @@
     data() {
       return {
         missionCount: 0,
+        pageSize: 2,
+        currentPage: 1,
         activeNames: ['1'],
         isShow: false,
         detail: '',
@@ -114,13 +121,29 @@
     },
 
     created() {
-      ajax.getMissions().then((result) => {
-        this.tableData.list = result.data.data;
-        this.missionCount = this.tableData.list.length;
-      }).catch(() => {})
+      this.fetchAndSetMissions();
     },
 
     methods: {
+      fetchAndSetMissions: function(offset = 0, size = 2) {
+        ajax.getMissions(this.period, offset, size).then((result) => {
+          this.tableData.list = result.data.data;
+          this.missionCount = this.tableData.list.length;
+        }).catch(() => {})
+      },
+
+      handleSizeChange: function(pageSize) {
+        this.pageSize = pageSize;
+        this.fetchAndSetMissions(0, this.pageSize);
+        this.currentPage = 1;
+      },
+
+      handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+        this.fetchAndSetMissions((currentPage - 1) * this.pageSize, this.pageSize);
+      },
+
+
       addFilter: function () {
         this.filterForm.filters.push({
           key: Date.now(),
@@ -214,6 +237,11 @@
 
   .sch-search {
     margin-top: 1rem;
+  }
+
+  .el-pagination {
+    display: table;
+    margin: 0 auto;
   }
 
 </style>

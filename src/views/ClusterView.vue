@@ -39,6 +39,11 @@
         </el-collapse>
       </div>
     </div>
+    <div id="pagination">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+      :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" background :total="clusterCount">
+      </el-pagination>
+    </div>
     <div>
       <el-dialog :title="dialogData.title" :visible.sync="dialog">
         <el-form :inline="true" :model="dialogData.clusterForm" :rules="dialogData.clusterRules" ref="dialogData.clusterForm" label-width="6rem">
@@ -89,6 +94,8 @@
         activeNames: ['1'],
         isShow: false,
         detail: '',
+        pageSize: 2,
+        currentPage: 1,
         clusterCount: 0,
         tableData: {
           label: ["Name", "Creator", "PD Size", "TiDB Size", "TiKV Size", "ConfigMap", "Description"],
@@ -190,13 +197,28 @@
     },
 
     created() {
-      ajax.getClustersTemplate().then((result) => {
-        this.tableData.list = result.data.data;
-        this.clusterCount = this.tableData.list.length;
-      }).catch(() => {})
+      this.fetchAndSetClusterTemplate();
     },
 
     methods: {
+      fetchAndSetClusterTemplate: function(offset = 0, size = 2) {
+        ajax.getClustersTemplate(this.period, offset, size).then((result) => {
+          this.tableData.list = result.data.data;
+          this.missionCount = this.tableData.list.length;
+        }).catch(() => {})
+      },
+
+      handleSizeChange: function(pageSize) {
+        this.pageSize = pageSize;
+        this.fetchAndSetClusterTemplate(0, this.pageSize);
+        this.currentPage = 1;
+      },
+
+      handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+        this.fetchAndSetClusterTemplate((currentPage - 1) * this.pageSize, this.pageSize);
+      },
+
       clickCreateClusterTemplate: function () {
         // this.clearClusterForm();
         this.dialogData.title = "Create Cluster Template";
@@ -373,3 +395,10 @@
   }
 
 </script>
+
+<style>
+  .el-pagination {
+    display: table;
+    margin: 0 auto;
+  }
+</style>

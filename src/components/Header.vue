@@ -20,7 +20,6 @@
 </template>
 <script>
   export default {
-    name: 'header',
     data() {
       let activeIndex = 'daily';
       location.hash && (activeIndex = location.hash.slice(2));

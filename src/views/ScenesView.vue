@@ -39,6 +39,11 @@
         </el-collapse>
       </div>
     </div>
+    <div id="pagination">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+      :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" background :total="scenesCount">
+      </el-pagination>
+    </div>
     <div>
       <el-dialog :title="dialogData.title" :visible.sync="dialog">
         <el-form :inline="true" :model="dialogData.scenesForm" ref="dialogData.scenesForm" label-width="6rem">
@@ -78,7 +83,7 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="Lables:" :prop="'boxes.'+index + '.labels'"> 
+            <el-form-item label="Lables:" :prop="'boxes.'+index + '.labels'">
                <el-input v-model="box.labels"></el-input>
             </el-form-item>
           </div>
@@ -107,6 +112,8 @@
         activeNames: ['1'],
         isShow: false,
         detail: '',
+        pageSize: 2,
+        currentPage: 1,
         scenesCount: 0,
         clustersTemplate: [],
         casesTemplate: [],
@@ -141,13 +148,7 @@
     },
 
     created() {
-      ajax.getScenes().then((result) => {
-        result.data.data.forEach(function (element) {
-          element.boxes_count = Object.keys(element.boxes).length;
-        });
-        this.tableData.list = result.data.data;
-        this.scenesCount = this.tableData.list.length;
-      }).catch(() => {})
+      this.fetchAndSetScenes();
 
       ajax.getClustersTemplate().then((result) => {
         this.clustersTemplate = result.data.data;
@@ -159,6 +160,27 @@
     },
 
     methods: {
+      fetchAndSetScenes: function(offset = 0, size = 2) {
+        ajax.getScenes().then((result) => {
+        result.data.data.forEach(function (element) {
+          element.boxes_count = Object.keys(element.boxes).length;
+        });
+        this.tableData.list = result.data.data;
+        this.scenesCount = this.tableData.list.length;
+      }).catch(() => {})
+      },
+
+      handleSizeChange: function(pageSize) {
+        this.pageSize = pageSize;
+        this.fetchAndSetScenes(0, this.pageSize);
+        this.currentPage = 1;
+      },
+
+      handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+        this.fetchAndSetScenes((currentPage - 1) * this.pageSize, this.pageSize);
+      },
+
       clickCreateScenes: function () {
         this.clearScenesForm();
         this.dialogData.title = "Create New Scenes";
@@ -176,8 +198,8 @@
           // })
 
           var labelsToStr = function(labels) {
-            var str = "";   
-            var count = 0; 
+            var str = "";
+            var count = 0;
             for(var key in labels) {
               if(count == 0) {
                   str += key+"="+labels[key]
@@ -186,13 +208,13 @@
               }
               count++;
             }
-            return str 
+            return str
           }
 
           boxes.push({
             "name": e.name,
             "cluster_template": e.cluster_template,
-            "case_templates": e.case_templates, 
+            "case_templates": e.case_templates,
             "labels": labelsToStr(e.labels)
           })
         })
@@ -397,6 +419,11 @@
   .sch-a {
     margin-left: 1rem;
     color: blueviolet;
+  }
+
+  .el-pagination {
+    display: table;
+    margin: 0 auto;
   }
 
 </style>

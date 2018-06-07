@@ -42,6 +42,11 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+    <div id="pagination">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+      :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" background :total="caseCount">
+      </el-pagination>
+    </div>
     <div>
       <el-dialog title="Create Case Template" :visible.sync="dialogCreateCaseTemplate">
         <el-form :inline="true" :model="caseForm" :rules="rules" ref="caseForm" label-width="6rem">
@@ -74,7 +79,7 @@
             <el-select v-model="caseForm.source_type" placeholder="select source type">
               <el-option label="git" value="git"></el-option>
               <el-option label="bin" value="bin"></el-option>
-              <!-- <el-option label="docker" value="docker"></el-option> -->
+              <el-option label="docker" value="docker"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Git Repo:" prop="git_repo">
@@ -88,6 +93,9 @@
           </el-form-item>
           <el-form-item label="Args:" prop="args">
             <el-input v-model="caseForm.args"></el-input>
+          </el-form-item>
+          <el-form-item label="Image Address:" prop="img_add">
+            <el-input v-model="caseForm.img_add"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -173,6 +181,8 @@
         detail: '',
         lastDetail: '',
         caseCount: 0,
+        pageSize: 2,
+        currentPage: 1,
         tableData: {
           label: ["Name", "Creator", "Update Time", "Type"],
           prop: ["name", "creator", "update_time", "type"],
@@ -202,7 +212,8 @@
           source_url: '',
           git_repo: '',
           git_value: '',
-          args: ''
+          args: '',
+          img_add: ''
         },
 
         rules: {
@@ -262,13 +273,28 @@
     },
 
     created() {
-      ajax.getCasesTemplate().then((result) => {
-        this.tableData.list = result.data.data;
-        this.caseCount = this.tableData.list.length;
-      }).catch(() => {})
+      this.fetchAndSetCasesTemplate();
     },
 
     methods: {
+      fetchAndSetCasesTemplate: function(offset = 0, size = 2) {
+        ajax.getCasesTemplate(this.period, offset, size).then((result) => {
+          this.tableData.list = result.data.data;
+          this.missionCount = this.tableData.list.length;
+        }).catch(() => {})
+      },
+
+      handleSizeChange: function(pageSize) {
+        this.pageSize = pageSize;
+        this.fetchAndSetCasesTemplate(0, this.pageSize);
+        this.currentPage = 1;
+      },
+
+      handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+        this.fetchAndSetCasesTemplate((currentPage - 1) * this.pageSize, this.pageSize);
+      },
+
       createCaseTemplate: function () {
         ajax.createCaseTemplate({
           name: this.caseForm.name,
@@ -477,4 +503,8 @@
     margin-bottom: 1rem;
   }
 
+  .el-pagination {
+    display: table;
+    margin: 0 auto;
+  }
 </style>

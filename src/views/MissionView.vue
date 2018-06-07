@@ -20,10 +20,11 @@
             <el-button @click="clickCreateMission">New</el-button>
           </div>
         </div>
-        <sh-table :tableData="tableData"></sh-table>
+        <!-- <sh-table :tableData="tableData"></sh-table> -->
+        <collapse-table :tableData="tableData"></collapse-table>
       </el-card>
     </div>
-    <div v-show="isShow" class="sch-detail">
+    <!-- <div v-show="isShow" class="sch-detail">
       <el-collapse v-model="activeNames">
         <el-collapse-item title="Mission Detail" name="1">
           <div class="sch-detail-header">
@@ -49,6 +50,11 @@
           </div>
         </el-collapse-item>
       </el-collapse>
+    </div> -->
+    <div id="pagination">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+      :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" background :total="missionCount">
+      </el-pagination>
     </div>
     <div>
       <el-dialog :title="dialogData.title" :visible.sync="dialog">
@@ -58,7 +64,7 @@
           </el-form-item>
           <el-form-item label="Scenes:" prop="scenes_name">
             <el-select v-model="dialogData.missionForm.scenes_name" placeholder="select scenes">
-              <el-option v-for="(s, index) in scenes" :key="s.id" :label="s.name" :value="s.name"></el-option>
+              <el-option v-for="(s) in scenes" :key="s.id" :label="s.name" :value="s.name"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="PD Version:" prop="pd_version">
@@ -91,12 +97,14 @@
 </template>
 
 <script>
-  import shTable from '../components/table';
+  // import shTable from '../components/table';
+  import collapseTable from '../components/CollapseTable'
   import ajax from '../request/index'
 
   export default {
     components: {
-      shTable
+      // shTable
+      collapseTable
     },
 
     name: "mission",
@@ -104,6 +112,8 @@
     data() {
       return {
         missionCount: 0,
+        pageSize: 2,
+        currentPage: 1,
         activeNames: ['1'],
         isShow: false,
         detail: '',
@@ -117,7 +127,7 @@
             if (row == null) {
               return
             }
-
+            // debugger
             ajax.getMissionReportByID(row.id).then((result) => {
               this.detail = result.data.data;
               this.detail.scenes_name = row.scenes.name;
@@ -126,6 +136,7 @@
               this.detail.id = row.id;
             }).catch(() => {})
 
+            // debugger
             ajax.getMissionDetailByID(row.id).then((result) => {
               this.detail.name = result.data.data.name;
               this.detail.pd_version = result.data.data.pd_version;
@@ -139,8 +150,10 @@
                 this.detail.slack_channel = result.data.data.messager.callback;
               }
             }).catch(() => {})
-
+            console.log("isshow is ", this.isShow)
+            console.log("detail is ", this.detail)
             this.isShow = true;
+            // debugger
           }.bind(this)
         },
 
@@ -255,10 +268,7 @@
     },
 
     created() {
-      ajax.getMissions().then((result) => {
-        this.tableData.list = result.data.data;
-        this.missionCount = this.tableData.list.length;
-      }).catch(() => {})
+      this.fetchAndSetMissions();
 
       ajax.getScenes().then((result) => {
         this.scenes = result.data.data;
@@ -266,6 +276,25 @@
     },
 
     methods: {
+      fetchAndSetMissions: function(offset = 0, size = 2) {
+        ajax.getMissions(this.period, offset, size).then((result) => {
+          this.tableData.list = result.data.data;
+          // debugger
+          this.missionCount = this.tableData.list.length;
+        }).catch(() => {})
+      },
+
+      handleSizeChange: function(pageSize) {
+        this.pageSize = pageSize;
+        this.fetchAndSetMissions(0, this.pageSize);
+        this.currentPage = 1;
+      },
+
+      handleCurrentChange: function(currentPage) {
+        this.currentPage = currentPage;
+        this.fetchAndSetMissions((currentPage - 1) * this.pageSize, this.pageSize);
+      },
+
       clickCreateMission: function () {
         this.dialogData = Object.assign({}, this.dialogData, {
           title: "Create New Mission",
@@ -487,6 +516,11 @@
 
   .sch-search {
     margin-top: 1rem;
+  }
+
+  .el-pagination {
+    display: table;
+    margin: 0 auto;
   }
 
 </style>
