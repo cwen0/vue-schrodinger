@@ -196,6 +196,7 @@
               this.detail = result.data.data;
               this.isShow = true;
               this.lastDetail = row;
+              // console.log('hello from get case template by name, and detail is ', this.detail)
             }).catch(() => {})
           }.bind(this)
         },
@@ -307,7 +308,8 @@
             type: this.caseForm.source_type,
             git_repo: this.caseForm.git_repo,
             git_value: this.caseForm.git_value,
-            url: this.caseForm.source_url
+            url: this.caseForm.source_url,
+            image: this.caseForm.img_add
           }
         }).then((result) => {
           console.log(result);
@@ -354,7 +356,8 @@
             type: this.caseForm.source_type,
             git_repo: this.caseForm.git_repo,
             git_value: this.caseForm.git_value,
-            url: this.caseForm.source_url
+            url: this.caseForm.source_url,
+            image: this.caseFrom.img_add
           }
         }).then((result) => {
           if (result.data.code != 200) {
@@ -468,7 +471,8 @@
           git_repo: this.detail.source.git_repo,
           git_value: this.detail.source.git_value,
           args: this.detail.args,
-          source_url: this.detail.source.url
+          source_url: this.detail.source.url,
+          img_add: this.detail.img_add
         };
         this.dialogUpdateCaseTemplate = true;
       },
