@@ -4,7 +4,6 @@
       <el-card class="box-card">
         <div class="sch-card-header">
           <div>
-            <!-- <span>Mission Name: {{missionCount}}</span> -->
             <span><Strong>Mission ID:</Strong> {{mission_id}}</span>
           </div>
           <div>

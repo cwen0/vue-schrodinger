@@ -22,14 +22,6 @@
                 <strong> {{detail.status}}</strong>
               </span>
             </div>
-            <!-- <div>
-              <el-button>
-                <i class="fa fa-play" aria-hidden="true"></i> Run</el-button>
-              <el-button v-on:click="confirmStopMission()">
-                <i class="fa fa-stop" aria-hidden="true"></i> Stop</el-button>
-              <el-button>
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</el-button>
-            </div> -->
           </div>
           <div class="sch-detail-body">
             <pre>{{detail}}</pre>

@@ -26,8 +26,6 @@
                 </span>
               </div>
               <div>
-                <!-- <el-button @click="clickDeleteClusterTemplate()">
-                  <i class="fa fa-trash-o" aria-hidden="true"></i> Delete</el-button> -->
                 <el-button @click="clickUpdateClusterTemplate()">
                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</el-button>
               </div>
