@@ -82,47 +82,43 @@
           label: ['Mission ID', 'Mission Name', 'Status', 'Scenes', 'Update Time'],
           prop: ['id', 'name', 'status', 'scenes.name', 'update_time'],
           list: [],
+
           // expand_content: '',
 
-          handleClick: function (row) {
-            if (row == null) {
-              return
-            }
-            console.log('row is ', row, 'and row id is ', row.id)
-            // let detail
-            // console.log('activeName is ', this.activeNames)
-             ajax.getMissionReportByID(row.id).then((result) => {
-              // detail = result.data.data
-              this.detail = result.data.data;
-              this.detail.scenes_name = row.scenes.name;
-              this.detail.status = row.status;
-              this.detail.name = row.name;
-              this.isShow = true;
+          // handleClick: function (row) {
+          //   if (row == null) {
+          //     return
+          //   }
+          //   console.log('row is ', row, 'and row id is ', row.id)
+          //   // let detail
+          //   // console.log('activeName is ', this.activeNames)
+          //    ajax.getMissionReportByID(row.id).then((result) => {
+          //     // detail = result.data.data
+          //     this.detail = result.data.data;
+          //     this.detail.scenes_name = row.scenes.name;
+          //     this.detail.status = row.status;
+          //     this.detail.name = row.name;
+          //     this.isShow = true;
 
-            }).catch(() => {})
+          //   }).catch(() => {})
 
 
 
-            ajax.getMissionDetailByID(row.id).then((result) => {
-              this.detail.name = result.data.data.name;
-              this.detail.pd_version = result.data.data.pd_version;
-              this.detail.tidb_version = result.data.data.tidb_version;
-              this.detail.tikv_version = result.data.data.tikv_version;
-              this.detail.timeout = result.data.data.timeout;
-              // console.log("come on babe this.detail ", this.detail.name);
-              if (result.data.data.messager.callback == "") {
-                this.detail.slack_channel = "#stability_tester"
-              } else {
-                this.detail.slack_channel = result.data.data.messager.callback;
-              }
-            }).catch(() => {})
-
-            // this.isShow = true;
-            // debugger
-            // console.log("this.detail ", this.detail);
-            // this.tableData.expand_content = this.detail;
-            console.log("tabledata ", this.tableData);
-          }.bind(this)
+          //   ajax.getMissionDetailByID(row.id).then((result) => {
+          //     this.detail.name = result.data.data.name;
+          //     this.detail.pd_version = result.data.data.pd_version;
+          //     this.detail.tidb_version = result.data.data.tidb_version;
+          //     this.detail.tikv_version = result.data.data.tikv_version;
+          //     this.detail.timeout = result.data.data.timeout;
+          //     // console.log("come on babe this.detail ", this.detail.name);
+          //     if (result.data.data.messager.callback == "") {
+          //       this.detail.slack_channel = "#stability_tester"
+          //     } else {
+          //       this.detail.slack_channel = result.data.data.messager.callback;
+          //     }
+          //   }).catch(() => {})
+          //   console.log("tabledata ", this.tableData);
+          // }.bind(this)
         },
       }
     },

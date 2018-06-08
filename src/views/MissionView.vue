@@ -56,7 +56,7 @@
       :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" background :total="missionCount">
       </el-pagination>
     </div>
-    <div>
+    <div id="dialog">
       <el-dialog :title="dialogData.title" :visible.sync="dialog">
         <el-form :inline="true" :model="dialogData.missionForm" :rules="dialogData.missionRules" ref="dialogData.missionForm" label-width="6rem">
           <el-form-item label="Name:" prop="name">

@@ -565,5 +565,26 @@ class Ajax {
     return axios.post(`${Proxy}/box/${name}/run`)
   }
 
+  replayMission (id) {
+    return axios.post(`${Proxy}/mission/${id}/replay/false`)
+  }
+
+  replayMissionWithData (id, data) {
+    console.log(data)
+    return axios.post(`${Proxy}/mission/${id}/replay/false`, data)
+  }
+
+  holdMission (id) {
+    return axios.post(`${Proxy}/mission/${id}/hold`)
+  }
+
+  getExpiredMission () {
+    return axios.get(`${Proxy}/mission/expired`)
+  }
+
+  handleMission (id) {
+    return axios.post(`${Proxy}/mission/${id}/handle`)
+  }
+
 }
 export default new Ajax()

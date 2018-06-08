@@ -15,6 +15,7 @@
       <el-tab-pane label="Cluster Template" name="cluster"></el-tab-pane>
       <el-tab-pane label="History" name="history"></el-tab-pane>
       <el-tab-pane label="Release" name="release"></el-tab-pane>
+      <el-tab-pane label="ExpiredMission" name="expiredMission"></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -23,13 +24,15 @@
     data() {
       let activeIndex = 'daily';
       location.hash && (activeIndex = location.hash.slice(2));
+      console.log('activeindex is ', activeIndex)
       return {
         activeIndex
       };
     },
     methods: {
       tabClick(tab) {
-        let path = this.activeIndex;
+        let path = this.activeIndex
+        console.log('path is ', path)
         this.$router.push({
           path: path
         });

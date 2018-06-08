@@ -7,6 +7,8 @@ import CasesView from '@/views/CasesView'
 import HistoryView from '@/views/HistoryView'
 import ReleaseView from '@/views/ReleaseView'
 import MissionViw from '@/views/MissionView'
+import ExpiredMission from '@/views/ExpiredMission'
+import MissionOperation from '@/views/MissionOperation'
 
 Vue.use(Router)
 
@@ -34,8 +36,8 @@ export default new Router({
       component: DailyView
     },
     {
-      path: '/mission', 
-      name: 'MissionView', 
+      path: '/mission',
+      name: 'MissionView',
       component: MissionViw
     },
     {
@@ -49,19 +51,30 @@ export default new Router({
       component: ClusterView
     },
     {
-      path: '/cases', 
-      name: 'CasesView', 
-      component: CasesView 
-    }, 
+      path: '/cases',
+      name: 'CasesView',
+      component: CasesView
+    },
     {
-      path: '/history', 
-      name: 'HistoryView', 
+      path: '/history',
+      name: 'HistoryView',
       component: HistoryView
-    }, 
+    },
     {
-      path: '/release', 
-      name: 'ReleaseView', 
+      path: '/release',
+      name: 'ReleaseView',
       component: ReleaseView
+    },
+    {
+      path: '/expiredMission',
+      name: 'ExpiredMission',
+      component: ExpiredMission
+    },
+    {
+      path: '/missionOperation',
+      name: 'MissionOperation',
+      component: MissionOperation
     }
+
   ]
 })

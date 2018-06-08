@@ -22,6 +22,13 @@
       </el-table-column>
       <el-table-column v-for="(item, index) in data.prop" :key="index" :prop="item" :label="data.label[index]">
       </el-table-column>
+      <el-table-column label="Operation">
+        <template slot-scope="scope">
+          <router-link tag='el-button' :to="'/missionOperation?id='+scope.row.id">
+            Manage
+          </router-link>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
   <div id="detailDialog">
@@ -38,8 +45,6 @@
               <i class="fa fa-play" aria-hidden="true"></i> Run</el-button>
             <el-button @click="confirmStopBox">
               <i class="fa fa-stop" aria-hidden="true"></i> Stop</el-button>
-            <el-button @click="clickUpdateMission">
-              <i class="fa fa-pencil-square-o" aria-hidden="true" @click="clickUpdateMission"></i> Edit</el-button>
           </div>
         </div>
         <div class="sch-detail-body">
@@ -63,6 +68,7 @@
         // An array contains the row_ids of expanded row.
         expands: [],
         boxesLength: 0,
+        currentRowId: 0,
         preRowId: 0,
         data: this.tableData,
         detailContent: '',
@@ -73,20 +79,20 @@
         },
         dialog: false,
         boxDialogTitle: '',
+
       }
     },
     methods: {
       setCurrent(row) {
         this.$refs.singleTable.setCurrentRow(row)
       },
-
       // Get the row_id, which expanded.
-      getRowKeys(row) {
-        return row.id
-      },
+        getRowKeys(row) {
+          return row.id
+        },
 
       toggleRowExpansion(row) {
-        // Close the expanded row.
+        console.log('hello from toggle ', row)
         if(row.id == this.preRowId) {
           this.preRowId = 0
           this.expands = []
@@ -172,11 +178,6 @@
              message: 'Run Error'
            });
         });
-      },
-
-
-      clickUpdateMission: function() {
-
       },
 
       confirmStopBox: function () {
