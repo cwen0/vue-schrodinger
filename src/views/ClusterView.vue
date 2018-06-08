@@ -204,7 +204,7 @@
       fetchAndSetClusterTemplate: function(offset = 0, size = 2) {
         ajax.getClustersTemplate(this.period, offset, size).then((result) => {
           this.tableData.list = result.data.data;
-          this.missionCount = this.tableData.list.length;
+          this.clusterCount = this.tableData.list.length;
         }).catch(() => {})
       },
 

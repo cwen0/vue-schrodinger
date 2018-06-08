@@ -281,7 +281,7 @@
       fetchAndSetCasesTemplate: function(offset = 0, size = 2) {
         ajax.getCasesTemplate(this.period, offset, size).then((result) => {
           this.tableData.list = result.data.data;
-          this.missionCount = this.tableData.list.length;
+          this.caseCount = this.tableData.list.length;
         }).catch(() => {})
       },
 
