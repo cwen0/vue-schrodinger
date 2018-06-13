@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="sch-detail-body">
-          <pre>{{detailContent}}</pre>
+          <pre>{{boxDialogContent}}</pre>
         </div>
       <!-- </div> -->
     </el-dialog>
@@ -72,6 +72,7 @@
         preRowId: 0,
         data: this.tableData,
         detailContent: '',
+        boxDialogContent: '',
         boxesListTable: {
           label: ['Name', 'Status', 'Stage'],
           prop: ['name', 'status', 'stage'],
@@ -106,6 +107,7 @@
         ajax.getMissionReportByID(row.id).then((result) => {
           this.boxesListTable.boxesList = []
           this.detailContent = result.data.data
+          console.log('mission is,' , this.detailContent)
           var vals = _.values(this.detailContent.boxes)
           console.log("before flatten ", vals)
           vals.forEach(item => {
@@ -136,8 +138,7 @@
 
       handleDetailClick: function(val) {
         this.boxDialogTitle = val.name
-        console.log('val is ', val)
-        console.log('handle detail click')
+        this.boxDialogContent = val
         this.dialog = true
       },
 

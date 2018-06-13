@@ -116,9 +116,9 @@
           clusterForm: {
             name: '',
             creator: '',
-            pd: 3,
-            tidb: 3,
-            tikv: 5,
+            pd: '',
+            tidb: '',
+            tikv: '',
             config_map: '',
             desc: ''
           },
