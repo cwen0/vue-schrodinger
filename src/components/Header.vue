@@ -22,9 +22,9 @@
 <script>
   export default {
     data() {
+      // let notMissionOperationView = true;
       let activeIndex = 'daily';
       location.hash && (activeIndex = location.hash.slice(2));
-      console.log('activeindex is ', activeIndex)
       return {
         activeIndex
       };

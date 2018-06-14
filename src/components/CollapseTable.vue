@@ -24,9 +24,10 @@
       </el-table-column>
       <el-table-column label="Operation">
         <template slot-scope="scope">
-          <router-link tag='el-button' :to="'/missionOperation?id='+scope.row.id">
+          <!-- <router-link tag='el-button' :to="'/missionOperation?id='+scope.row.id">
             Manage
-          </router-link>
+          </router-link> -->
+          <el-button @click.native="handleManageClick(scope.row.id)">Manage</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,6 +72,7 @@
         currentRowId: 0,
         preRowId: 0,
         data: this.tableData,
+        missionId: '',
         detailContent: '',
         boxDialogContent: '',
         boxesListTable: {
@@ -107,7 +109,8 @@
         ajax.getMissionReportByID(row.id).then((result) => {
           this.boxesListTable.boxesList = []
           this.detailContent = result.data.data
-          console.log('mission is,' , this.detailContent)
+          this.missionId = row.id
+          console.log('mission' , this.detailContent)
           var vals = _.values(this.detailContent.boxes)
           console.log("before flatten ", vals)
           vals.forEach(item => {
@@ -120,20 +123,13 @@
           this.totalBox = this.boxesListTable.boxesList.length
           console.log("expand_content ", this.detailContent)
         }).catch((result) => {})
+      },
 
-        // ajax.getMissionDetailByID(row.id).then((result) => {
-        //       this.detail.name = result.data.data.name;
-        //       this.detail.pd_version = result.data.data.pd_version;
-        //       this.detail.tidb_version = result.data.data.tidb_version;
-        //       this.detail.tikv_version = result.data.data.tikv_version;
-        //       this.detail.timeout = result.data.data.timeout;
-        //       // console.log("come on babe this.detail ", this.detail.name);
-        //       if (result.data.data.messager.callback == "") {
-        //         this.detail.slack_channel = "#stability_tester"
-        //       } else {
-        //         this.detail.slack_channel = result.data.data.messager.callback;
-        //       }
-        //     }).catch(() => {})
+      handleManageClick: function(id) {
+        console.log('hello from manage')
+        console.log('manage id ', id)
+        let route = this.$router.resolve({path: '/missionOperation?id='+id})
+        window.open(route.href, '_blank')
       },
 
       handleDetailClick: function(val) {
@@ -143,13 +139,13 @@
       },
 
       clickRunMission: function() {
-        console.log('inside run mission')
+        console.log('inside run mission and boxDialogTitle is ', this.boxDialogTitle)
         this.$confirm('Will RUN this box, contimue?', 'Warning', {
           confirmButtonText: 'OK',
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-            ajax.runBoxByName(this.boxDialogTitle).then((result) => {
+            ajax.runBoxByName(this.missionId, this.boxDialogTitle).then((result) => {
               if(result.data.code != 200) {
                 this.$notify({
                   title: "ERROR",
@@ -187,7 +183,7 @@
           cancelButtonText: 'Cancel',
           type: 'warning'
         }).then(() => {
-          ajax.stopBoxByName(this.boxDialogTitle).then((result) => {
+          ajax.stopBoxByName(this.missionId, this.boxDialogTitle).then((result) => {
             if (result.data.code != 200) {
               this.$notify({
                 title: "ERROR",

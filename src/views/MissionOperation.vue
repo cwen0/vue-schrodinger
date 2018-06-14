@@ -1,20 +1,19 @@
 <template>
   <div>
-    <div class="card">
+    <!-- <div class="card">
       <el-card class="box-card">
         <div class="sch-card-header">
           <div>
             <span><Strong>Mission ID:</Strong> {{mission_id}}</span>
           </div>
           <div>
-            <el-button @click="clickRerun" >Rerun</el-button>
-            <el-button @click="clickHold" type="primary">Hold</el-button>
-            <el-button type="success" @click="clickCreateMission" >New</el-button>
+            <el-button @click="clickReplay" >Replay</el-button>
+            <el-button @click="clickStop" type="primary">Stop</el-button>
           </div>
         </div>
       </el-card>
-    </div>
-     <div>
+    </div> -->
+     <!-- <div>
       <el-dialog :title="dialogData.title" :visible.sync="dialog">
         <el-form :model="dialogData.missionForm" :rules="dialogData.missionRules" ref="dialogData.missionForm" label-width="6rem">
           <el-form-item label="PD Version:" prop="pd_version">
@@ -33,6 +32,30 @@
           <el-button @click="submitForm('dialogData.missionForm', dialogData.type)">OK</el-button>
         </div>
       </el-dialog>
+    </div> -->
+    <div class="sch-detail">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="Mission Detail" name="1">
+          <div class="sch-detail-header">
+            <div class="sch-detail-summery">
+              <span>Mission Name:
+                <strong> {{detail.name}}</strong>
+              </span>
+              <span><Strong>Mission ID:</Strong> {{mission_id}}</span>
+              <span>Status:
+                <strong> {{detail.status}}</strong>
+              </span>
+            </div>
+            <div>
+              <el-button @click="clickReplay" >Replay</el-button>
+              <el-button @click="clickStop" type="primary">Stop</el-button>
+            </div>
+          </div>
+          <div class="sch-detail-body">
+            <pre>{{detail}}</pre>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
   </div>
 </template>
@@ -44,6 +67,7 @@ export default {
   name: 'missionOperation',
   data() {
     return {
+      activeNames: ['1'],
       mission_id: this.$route.query.id,
       dialog: false,
       detail: '',
@@ -108,17 +132,17 @@ export default {
   },
 
   methods: {
-      clickRerun: function() {
+      clickReplay: function() {
         console.log('hello from rerun')
         if (this.mission_id == null || this.mission_id == "") {
           alert("mission id cannot be empty");
           return
         }
-         this.dialogData.missionForm.tidb_version = this.detail.tidb_version;
-         this.dialogData.missionForm.tikv_version = this.detail.tikv_version;
-         this.dialogData.missionForm.pd_version = this.detail.pd_version;
+        //  this.dialogData.missionForm.tidb_version = this.detail.tidb_version;
+        //  this.dialogData.missionForm.tikv_version = this.detail.tikv_version;
+        //  this.dialogData.missionForm.pd_version = this.detail.pd_version;
 
-        ajax.replayMissionWithData(this.mission_id, this.dialogData.missionForm).then((result) => {
+        ajax.replayMission(this.mission_id).then((result) => {
           if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
@@ -133,7 +157,7 @@ export default {
             type: 'success',
             message: 'replay Mission Success!'
           });
-          this.clearMissionForm();
+          // this.clearMissionForm();
         }).catch((resp) => {
           this.$notify({
             title: "ERROR",
@@ -144,12 +168,12 @@ export default {
         })
       },
 
-      clickHold: function() {
+      clickStop: function() {
         if (this.mission_id == null || this.mission_id == "") {
           alert("mission id cannot be empty");
           return
         }
-        ajax.holdMission(this.mission_id).then((result) => {
+        ajax.stopMission(this.mission_id).then((result) => {
           if (result.data.code != 200) {
             this.$notify({
               title: "ERROR",
@@ -162,7 +186,7 @@ export default {
           this.$notify({
             title: "SUCCESS",
             type: 'success',
-            message: 'hold Mission Success!'
+            message: 'Stop Mission Success!'
           });
           this.clearMissionForm();
         }).catch((resp) => {
@@ -185,11 +209,13 @@ export default {
         })
         this.dialog = true;
       },
+
       resetForm(formName) {
         if (this.$refs[formName] != null) {
           this.$refs[formName].resetFields();
         }
       },
+
       submitForm: function (formName, type) {
         this.$refs[formName].validate((valid) => {
           if (valid) {

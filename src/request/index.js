@@ -557,18 +557,21 @@ class Ajax {
     return axios.post(`${Proxy}/release`, data)
   }
 
-  stopBoxByName (name) {
-    return axios.post(`${Proxy}/box/${name}/stop`)
+  stopBoxByName (missionId, boxName) {
+    return axios.post(`${Proxy}/mission/${missionId}/stop/${boxName}`)
   }
 
-  runBoxByName (name) {
-    return axios.post(`${Proxy}/box/${name}/run`)
+  runBoxByName (missionId, boxName) {
+    return axios.post(`${Proxy}/mission/${missionId}/start/${boxName}`)
   }
 
   replayMission (id) {
-    return axios.post(`${Proxy}/mission/${id}/replay/false`)
+    return axios.post(`${Proxy}/mission/${id}/replay`)
   }
 
+  stopMission (id) {
+    return axios.post(`${Proxy}/mission/${id}/stop`)
+  }
   replayMissionWithData (id, data) {
     console.log(data)
     return axios.post(`${Proxy}/mission/${id}/replay/false`, data)
