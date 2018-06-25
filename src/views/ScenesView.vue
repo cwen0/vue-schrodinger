@@ -48,6 +48,12 @@
           <el-form-item label="Creator:" prop="creator">
             <el-input v-model="dialogData.scenesForm.creator"></el-input>
           </el-form-item>
+           <el-form-item label="Type:" :prop="type">
+              <el-select v-model="dialogData.scenesForm.type" placeholder="select sence type">
+                <el-option label="general" value="general"></el-option>
+                <el-option label="bench" value="bench"></el-option>
+              </el-select>
+            </el-form-item>
           <el-form-item label="Desc:" prop="desc">
             <el-input v-model="dialogData.scenesForm.desc"></el-input>
           </el-form-item>
@@ -111,8 +117,8 @@
         clustersTemplate: [],
         casesTemplate: [],
         tableData: {
-          label: ["Name", "Creator", "Update Time", "Boxes Count"],
-          prop: ["name", "creator", "update_time", "boxes_count"],
+          label: ["Name", "Creator","Type", "Update Time", "Boxes Count"],
+          prop: ["name", "creator", "type", "update_time", "boxes_count"],
           list: [],
 
           handleClick: function (row) {
@@ -133,6 +139,7 @@
           scenesForm: {
             name: '',
             creator: '',
+            type: '',
             desc: '',
             boxes: []
           }
@@ -175,25 +182,25 @@
           //   cases.push(c.name);
           // })
 
-          var labelsToStr = function(labels) {
-            var str = "";   
-            var count = 0; 
-            for(var key in labels) {
-              if(count == 0) {
-                  str += key+"="+labels[key]
-              } else {
-                  str += ","+key+"="+labels[key]
-              }
-              count++;
-            }
-            return str 
-          }
+          // var labelsToStr = function(labels) {
+          //   var str = "";   
+          //   var count = 0; 
+          //   for(var key in labels) {
+          //     if(count == 0) {
+          //         str += key+"="+labels[key]
+          //     } else {
+          //         str += ","+key+"="+labels[key]
+          //     }
+          //     count++;
+          //   }
+          //   return str 
+          // }
 
           boxes.push({
             "name": e.name,
             "cluster_template": e.cluster_template,
             "case_templates": e.case_templates, 
-            "labels": labelsToStr(e.labels)
+            "labels": e.labels
           })
         })
 
@@ -203,6 +210,7 @@
           scenesForm: {
             name: this.detail.name,
             creator: this.detail.creator,
+            type: this.detail.type, 
             desc: this.detail.desc,
             boxes: boxes
           }
@@ -254,6 +262,7 @@
         this.dialogData.scenesForm = {
           name: '',
           creator: '',
+          type: '',
           boxes: []
         }
       },
@@ -307,6 +316,7 @@
           name: this.dialogData.scenesForm.name,
           creator: this.dialogData.scenesForm.creator,
           desc: this.dialogData.scenesForm.desc,
+          type: this.dialogData.scenesForm.type, 
           boxes: this.dialogData.scenesForm.boxes
         }).then((result) => {
           // console.log(result);
@@ -345,6 +355,7 @@
           id: this.detail.id,
           name: this.dialogData.scenesForm.name,
           creator: this.dialogData.scenesForm.creator,
+          type: this.dialogData.scenesForm.type, 
           desc: this.dialogData.scenesForm.desc,
           boxes: this.dialogData.scenesForm.boxes
         }).then((result) => {

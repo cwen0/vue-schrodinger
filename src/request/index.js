@@ -359,6 +359,7 @@ class Ajax {
   }
 
   setScenes(data) {
+    console.log(data);
     return axios.post(`${Proxy}/scenes`, data)
   }
 
